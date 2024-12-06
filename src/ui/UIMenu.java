@@ -3,6 +3,7 @@ package ui;
 import users.Auth;
 import users.Doctor;
 import users.Patient;
+import users.User;
 
 import java.util.Scanner;
 
@@ -70,21 +71,18 @@ public class UIMenu {
 
     static void showDevMenu() {
         int response;
-        final int optionsLength = 4;
+        final int optionsLength = 3;
         System.out.println("DEV MENU");
         do {
-            System.out.println(">> Select an option:\n(1).Show doctors\n(2).Show users\n(3).Show auths\n(4).Exit");
+            System.out.println(">> Select an option:\n(1).Show users\n(2).Show auths\n(3).Exit");
             System.out.print("Your option: ");
             response = scan.nextInt();
 
             switch (response) {
                 case 1:
-                    Doctor.showDoctors();
+                    User.showUsers();
                     break;
                 case 2:
-                    Patient.showPatients();
-                    break;
-                case 3:
                     Auth.showAuths();
                     break;
                 case optionsLength:
@@ -162,7 +160,7 @@ public class UIMenu {
         scan.nextLine();
 
         Patient patient = new Patient(name, email, address, phoneNumber, birthday, weight, height, blood);
-        Patient.registerPatient(patient);
+        User.registerUser(patient);
         registerNewAuth(patient.id);
 
         System.out.println("OPERATION SUCCEED: New patient registered.");
@@ -176,7 +174,7 @@ public class UIMenu {
         speciality = scan.nextLine();
 
         Doctor doctor = new Doctor(name, email, address, phoneNumber, speciality);
-        Doctor.registerDoctor(doctor);
+        User.registerUser(doctor);
         registerNewAuth(doctor.id);
 
         System.out.println("OPERATION SUCCEED: New doctor registered.");
