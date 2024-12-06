@@ -120,7 +120,7 @@ public class UIMenu {
         int response;
         do {
             System.out.println("What are you?:\n(1).Doctor\n(2).Patient");
-            System.out.println("Your option: ");
+            System.out.print("Your option: ");
             response = scan.nextInt();
             scan.nextLine();
         } while (response < 1 || response > 2);
