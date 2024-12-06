@@ -1,8 +1,14 @@
+package users;
+
+import java.util.ArrayList;
+
 public class User {
     private String name;
     private String email;
     private String address;
     private String phoneNumber;
+
+    static ArrayList<Doctor> doctors = new ArrayList<>();
 
     public User(String name, String email, String address, String phoneNumber) {
         this.name = name;
