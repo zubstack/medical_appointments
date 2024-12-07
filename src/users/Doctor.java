@@ -39,7 +39,7 @@ public class Doctor extends User {
         }
     }
 
-    public void seNewAppointment(AvailableAppointment appointment) {
+    public void addNewAppointment(AvailableAppointment appointment) {
         availableAppointments.add(appointment);
     }
 

@@ -14,7 +14,6 @@ public class Patient extends User {
         this.weight =weight;
         this.height = height;
         this.blood = blood;
-        id++;
     }
 
     public String getBirthday() {

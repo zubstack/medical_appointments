@@ -12,9 +12,14 @@ public class UIMenu {
             "January", "February", "March", "April", "May", "June",
             "July", "August", "September", "October", "November", "December"
     };
-    static Scanner scan = new Scanner(System.in);
+    private Scanner scan = null;
 
-    public static void showMenu() {
+    public UIMenu(Scanner scan) {
+        this.scan = scan;
+    }
+
+
+    public  void showMenu() {
         int response;
         final int optionsLength = 3;
         System.out.println("Welcome to Medical Appointments");
@@ -25,7 +30,7 @@ public class UIMenu {
 
             switch (response) {
                 case 1:
-                    System.out.println("Login");
+                    login();
                     break;
                 case 2:
                     registerUser();
@@ -43,7 +48,7 @@ public class UIMenu {
         } while (response != optionsLength);
     }
 
-    static void showPatientMenu() {
+    private void showPatientMenu() {
         int response;
         final int optionsLength = 3;
         System.out.println("Welcome unknown patient!");
@@ -69,7 +74,7 @@ public class UIMenu {
         } while (response != optionsLength);
     }
 
-    static void showDevMenu() {
+    private void showDevMenu() {
         int response;
         final int optionsLength = 3;
         System.out.println("DEV MENU");
@@ -94,7 +99,7 @@ public class UIMenu {
         } while (response != optionsLength);
     }
 
-    static String getMonth() {
+    private String getMonth() {
         int response;
         final int optionsLength = 3;
         do {
@@ -108,7 +113,7 @@ public class UIMenu {
         return MONTHS[response];
     }
 
-    static void registerUser() {
+    private void registerUser() {
         String name;
         String email;
         String address;
@@ -143,7 +148,7 @@ public class UIMenu {
 
     }
 
-    static void registerNewPatient(String name, String email, String address, String phoneNumber) {
+    private void registerNewPatient(String name, String email, String address, String phoneNumber) {
         String birthday;
         String blood;
         double weight;
@@ -161,13 +166,13 @@ public class UIMenu {
 
         Patient patient = new Patient(name, email, address, phoneNumber, birthday, weight, height, blood);
         User.registerUser(patient);
-        registerNewAuth(patient.id);
+        registerNewAuth(patient.getId());
 
         System.out.println("OPERATION SUCCEED: New patient registered.");
         System.out.println();
     }
 
-    static void registerNewDoctor(String name, String email, String address, String phoneNumber) {
+    private void registerNewDoctor(String name, String email, String address, String phoneNumber) {
         String speciality;
 
         System.out.print("Speciality: ");
@@ -175,24 +180,38 @@ public class UIMenu {
 
         Doctor doctor = new Doctor(name, email, address, phoneNumber, speciality);
         User.registerUser(doctor);
-        registerNewAuth(doctor.id);
+        registerNewAuth(doctor.getId());
 
         System.out.println("OPERATION SUCCEED: New doctor registered.");
         System.out.println();
     }
 
-    static void registerNewAuth(int userId) {
+    private void registerNewAuth(String userId) {
         System.out.println(">> Register your credentials");
         String username;
         String password;
 
         System.out.print("Username: ");
-        username = scan.nextLine();
+        username = scan.nextLine().trim();
         System.out.print("Password: ");
-        password = scan.nextLine();
+        password = scan.nextLine().trim();
 
         Auth auth = new Auth(username, userId, password);
         Auth.addNewAuth(auth);
+    }
+
+    private void login (){
+        scan.nextLine();
+        System.out.println(">> Enter your credentials");
+        String username;
+        String password;
+
+        System.out.print("Username: ");
+        username = scan.nextLine().trim();
+        System.out.print("Password: ");
+        password = scan.nextLine().trim();
+
+        Auth.login(username, password);
     }
 
 }

@@ -4,16 +4,16 @@ import java.util.ArrayList;
 
 public class Auth {
     private String username;
-    public int userId;
+    private String userId;
     private String password;
 
     static ArrayList<Auth> auths = new ArrayList<>();
 
-    public Auth(String username, int userId, String password){
+    public Auth(String username, String userId, String password) {
         this.password = password;
         this.username = username;
         this.userId = userId;
-   }
+    }
 
     static public void addNewAuth(Auth auth) {
         auths.add(auth);
@@ -25,4 +25,42 @@ public class Auth {
             System.out.println("Auth: " + auth.username);
         }
     }
+
+    static private Auth findAuthByUsername(String username) {
+        for (Auth auth : auths) {
+            if (auth.getUsername().equals(username)) {
+                return auth;
+            }
+        }
+        return null;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    private String getUsername() {
+        return this.username;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    static public void login(String username, String password) {
+        try{
+            Auth auth = Auth.findAuthByUsername(username);
+            User user = User.findUserById(auth.getUserId());
+            if(auth.getPassword().equals(password)){
+                System.out.println("USER LOGGED IN: "+ user.getName());
+            }else {
+                throw new Exception("");
+            }
+
+        } catch (Exception e) {
+            System.out.println("[ERROR]: Invalid username or password");
+        }
+
+    }
+
 }

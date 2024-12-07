@@ -1,14 +1,19 @@
 //import java.util.Date;
 
-import static ui.UIMenu.*;
+import ui.UIMenu;
+
+import java.util.Scanner;
+
 
 public class Main {
     public static void main(String[] args) {
-         showMenu();
+        Scanner scan = new Scanner(System.in);
+        UIMenu uiMenu = new UIMenu(scan);
+        uiMenu.showMenu();
     }
 }
 
-//// Creating doctor
+/// / Creating doctor
 //users.Doctor doctor = new users.Doctor("Ulises", "ul@mail", "his-home","12345", "Pediatric");
 //// Creating new appointments
 //users.Doctor.AvailableAppointment appointment1 = new users.Doctor.AvailableAppointment(new Date(), "2pm");

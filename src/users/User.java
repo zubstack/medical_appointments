@@ -1,9 +1,10 @@
 package users;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class User {
-    public static int id = 0;
+    private String ID = UUID.randomUUID().toString();
     private String name;
     private String email;
     private String address;
@@ -16,7 +17,6 @@ public class User {
         this.email = email;
         this.address = address;
         this.phoneNumber = phoneNumber;
-        id++;
     }
 
     public ArrayList<User> getUsers() {
@@ -31,6 +31,19 @@ public class User {
         for (User user : users) {
             System.out.println(user.getClass().getSimpleName()+ ": " + user.getName());
         }
+    }
+
+    static public User findUserById (String userId){
+        for (User user : users) {
+            if(user.getId().equals(userId)){
+                return user;
+            }
+        }
+        return null;
+    }
+
+    public  String getId() {
+        return ID;
     }
 
     public String getName() {
