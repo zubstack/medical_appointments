@@ -2,10 +2,11 @@ package users;
 
 import java.util.ArrayList;
 
+
 public class Auth {
-    private String username;
-    private String userId;
-    private String password;
+    final private String username;
+    final private String userId;
+    final private String password;
 
     static ArrayList<Auth> auths = new ArrayList<>();
 
@@ -15,7 +16,7 @@ public class Auth {
         this.userId = userId;
     }
 
-    static public void addNewAuth(Auth auth) {
+    static public void registerNewAuth(Auth auth) {
         auths.add(auth);
     }
 
@@ -48,12 +49,12 @@ public class Auth {
     }
 
     static public void login(String username, String password) {
-        try{
+        try {
             Auth auth = Auth.findAuthByUsername(username);
             User user = User.findUserById(auth.getUserId());
-            if(auth.getPassword().equals(password)){
-                System.out.println("USER LOGGED IN: "+ user.getName());
-            }else {
+            if (auth.getPassword().equals(password)) {
+                System.out.println("USER LOGGED IN: " + user.getName());
+            } else {
                 throw new Exception("");
             }
 

@@ -2,6 +2,7 @@ package users;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.UUID;
 
 public class Doctor extends User {
     private String speciality;
@@ -13,7 +14,7 @@ public class Doctor extends User {
     }
 
     public static class AvailableAppointment {
-        int id;
+        final private String ID = UUID.randomUUID().toString();
         Date date;
         String time;
 

@@ -12,14 +12,14 @@ public class UIMenu {
             "January", "February", "March", "April", "May", "June",
             "July", "August", "September", "October", "November", "December"
     };
-    private Scanner scan = null;
+    final private Scanner scan;
 
     public UIMenu(Scanner scan) {
         this.scan = scan;
     }
 
 
-    public  void showMenu() {
+    public void showMenu() {
         int response;
         final int optionsLength = 3;
         System.out.println("Welcome to Medical Appointments");
@@ -67,7 +67,8 @@ public class UIMenu {
                     break;
                 case optionsLength:
                     System.out.println("Good bye unknown patient!.");
-                    System.out.println();                    break;
+                    System.out.println();
+                    break;
                 default:
                     System.out.println("Invalid option.");
             }
@@ -168,7 +169,7 @@ public class UIMenu {
         User.registerUser(patient);
         registerNewAuth(patient.getId());
 
-        System.out.println("OPERATION SUCCEED: New patient registered.");
+        System.out.println("OPERATION SUCCEED: New "+ patient.getClass().getSimpleName()+" has been registered.");
         System.out.println();
     }
 
@@ -182,7 +183,7 @@ public class UIMenu {
         User.registerUser(doctor);
         registerNewAuth(doctor.getId());
 
-        System.out.println("OPERATION SUCCEED: New doctor registered.");
+        System.out.println("OPERATION SUCCEED: New "+ doctor.getClass().getSimpleName()+" has been registered.");
         System.out.println();
     }
 
@@ -197,10 +198,10 @@ public class UIMenu {
         password = scan.nextLine().trim();
 
         Auth auth = new Auth(username, userId, password);
-        Auth.addNewAuth(auth);
+        Auth.registerNewAuth(auth);
     }
 
-    private void login (){
+    private void login() {
         scan.nextLine();
         System.out.println(">> Enter your credentials");
         String username;
@@ -212,6 +213,7 @@ public class UIMenu {
         password = scan.nextLine().trim();
 
         Auth.login(username, password);
+        System.out.println();
     }
 
 }

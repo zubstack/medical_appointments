@@ -1,7 +1,5 @@
 package users;
 
-import java.util.ArrayList;
-
 public class Patient extends User {
     private String birthday;
     private double weight;
@@ -11,7 +9,7 @@ public class Patient extends User {
     public Patient(String name, String email, String address, String phoneNumber, String birthday, double weight, double height, String blood) {
         super(name, email, address, phoneNumber);
         this.birthday = birthday;
-        this.weight =weight;
+        this.weight = weight;
         this.height = height;
         this.blood = blood;
     }

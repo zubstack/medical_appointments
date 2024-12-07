@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public class User {
-    private String ID = UUID.randomUUID().toString();
+    final private String ID = UUID.randomUUID().toString();
     private String name;
     private String email;
     private String address;
@@ -27,22 +27,22 @@ public class User {
         users.add(user);
     }
 
-    static public void showUsers(){
+    static public void showUsers() {
         for (User user : users) {
-            System.out.println(user.getClass().getSimpleName()+ ": " + user.getName());
+            System.out.println(user.getClass().getSimpleName() + ": " + user.getName());
         }
     }
 
-    static public User findUserById (String userId){
+    static public User findUserById(String userId) {
         for (User user : users) {
-            if(user.getId().equals(userId)){
+            if (user.getId().equals(userId)) {
                 return user;
             }
         }
         return null;
     }
 
-    public  String getId() {
+    public String getId() {
         return ID;
     }
 
