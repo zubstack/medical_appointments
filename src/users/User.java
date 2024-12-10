@@ -23,13 +23,15 @@ public class User {
         return users;
     }
 
-    static public void registerUser(User user) {
+    static public void registerNewUser(User user, String username, String password) {
         users.add(user);
+        Auth auth = new Auth(username, user.getId(), password);
+        Auth.registerNewAuth(auth);
     }
 
     static public void showUsers() {
         for (User user : users) {
-            System.out.println(user.getClass().getSimpleName() + ": " + user.getName());
+            System.out.println(user.toString());
         }
     }
 

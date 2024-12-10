@@ -240,6 +240,8 @@ public class UIMenu {
         String blood;
         double weight;
         double height;
+        String username;
+        String password;
 
         System.out.print("Birthday: ");
         birthday = scan.nextLine();
@@ -250,10 +252,14 @@ public class UIMenu {
         System.out.print("Height: ");
         height = scan.nextDouble();
         scan.nextLine();
+        System.out.println("\n>> Register your credentials");
+        System.out.print("Username: ");
+        username = scan.nextLine().trim();
+        System.out.print("Password: ");
+        password = scan.nextLine().trim();
 
         Patient patient = new Patient(name, email, address, phoneNumber, birthday, weight, height, blood);
-        User.registerUser(patient);
-        registerNewAuth(patient.getId());
+        User.registerNewUser(patient, username, password);
 
         System.out.println("**OPERATION SUCCEED: New " + patient.getClass().getSimpleName() + " has been registered.**");
         System.out.println();
@@ -261,31 +267,36 @@ public class UIMenu {
 
     private void registerNewDoctor(String name, String email, String address, String phoneNumber) {
         String speciality;
-
-        System.out.print("Speciality: ");
-        speciality = scan.nextLine();
-
-        Doctor doctor = new Doctor(name, email, address, phoneNumber, speciality);
-        User.registerUser(doctor);
-        registerNewAuth(doctor.getId());
-
-        System.out.println("**OPERATION SUCCEED: New " + doctor.getClass().getSimpleName() + " has been registered.**");
-        System.out.println();
-    }
-
-    private void registerNewAuth(String userId) {
-        System.out.println("\n>> Register your credentials");
         String username;
         String password;
 
+        System.out.print("Speciality: ");
+        speciality = scan.nextLine();
+        System.out.println("\n>> Register your credentials");
         System.out.print("Username: ");
         username = scan.nextLine().trim();
         System.out.print("Password: ");
         password = scan.nextLine().trim();
 
-        Auth auth = new Auth(username, userId, password);
-        Auth.registerNewAuth(auth);
+        Doctor doctor = new Doctor(name, email, address, phoneNumber, speciality);
+        User.registerNewUser(doctor, username, password);
+
+        System.out.println("**OPERATION SUCCEED: New " + doctor.getClass().getSimpleName() + " has been registered.**");
+        System.out.println();
     }
+
+//    private void registerNewAuth(String userId) {
+//        System.out.println("\n>> Register your credentials");
+//        String username;
+//        String password;
+//
+//        System.out.print("Username: ");
+//        username = scan.nextLine().trim();
+//        System.out.print("Password: ");
+//        password = scan.nextLine().trim();
+//
+//
+//    }
 
     private boolean login() {
         scan.nextLine();
@@ -298,9 +309,7 @@ public class UIMenu {
         System.out.print("Password: ");
         password = scan.nextLine().trim();
 
-        boolean loginCorrect = Auth.login(username, password);
-        System.out.println();
-        return loginCorrect;
+        return Auth.login(username, password);
     }
 
 }
