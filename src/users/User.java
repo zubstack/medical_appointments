@@ -23,7 +23,13 @@ public class User {
         return users;
     }
 
-    static public void registerNewUser(User user, String username, String password) {
+    static public void registerNewUser(Doctor user, String username, String password) {
+        users.add(user);
+        Auth auth = new Auth(username, user.getId(), password);
+        Auth.registerNewAuth(auth);
+    }
+
+    static public void registerNewUser(Patient user, String username, String password) {
         users.add(user);
         Auth auth = new Auth(username, user.getId(), password);
         Auth.registerNewAuth(auth);

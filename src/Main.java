@@ -3,9 +3,9 @@
 import ui.UIMenu;
 import users.Doctor;
 import users.Patient;
-import users.User;
 
 import java.util.Scanner;
+import static users.User.registerNewUser;
 
 
 public class Main {
@@ -15,13 +15,13 @@ public class Main {
 
         //   Initialize some users:
         Patient patient1 = new Patient("Gabriel", "email", "address", "092", "March 4", 70, 170.5, "C");
-        User.registerNewUser(patient1, "gab", "gab");
+        registerNewUser(patient1, "gab", "gab");
         Doctor doctor1 = new Doctor("Victor", "email", "address", "098", "Pediatric");
-        User.registerNewUser(doctor1, "vic", "vic");
+        registerNewUser(doctor1, "vic", "vic");
         Patient patient2 = new Patient("Jessica", "email", "address", "092", "June 4", 60, 160.5, "B");
-        User.registerNewUser(patient2, "jess", "jess");
+        registerNewUser(patient2, "jess", "jess");
         Doctor doctor2 = new Doctor("Ulises", "email", "address", "098", "Pediatric");
-        User.registerNewUser(doctor2, "uls", "uls");
+        registerNewUser(doctor2, "uls", "uls");
 
         // Show UI Menu
         uiMenu.showMenu();

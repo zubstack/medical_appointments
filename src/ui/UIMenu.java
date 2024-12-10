@@ -5,6 +5,7 @@ import users.Doctor;
 import users.Patient;
 import users.User;
 
+import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -36,10 +37,10 @@ public class UIMenu {
         String userClass = user.getClass().getSimpleName();
         switch (userClass) {
             case "Doctor":
-                showDoctorMenu(user);
+                showDoctorMenu((Doctor) user);
                 break;
             case "Patient":
-                showPatientMenu(user);
+                showPatientMenu((Patient) user);
                 break;
         }
     }
@@ -83,10 +84,10 @@ public class UIMenu {
         return false;
     }
 
-    private void showPatientMenu(User user) {
+    private void showPatientMenu(Patient patient) {
         int response = 0;
         final int optionsLength = 3;
-        System.out.println("**WELCOME, " + user.getName() + "**");
+        System.out.println("**WELCOME, " + patient.getName() + "**");
         do {
             try {
                 System.out.println("\n>> Select an option:\n(1).Book an appointment\n(2).Cancel appointment\n(3).Log out");
@@ -117,23 +118,26 @@ public class UIMenu {
 
     }
 
-    private void showDoctorMenu(User user) {
+    private void showDoctorMenu(Doctor doctor) {
         int response = 0;
         final int optionsLength = 3;
-        System.out.println("\n**WELCOME, " + user.getName() + "**");
+        System.out.println("\n**WELCOME, " + doctor.getName() + "**");
         do {
             try {
-                System.out.println("\n>> Select an option:\n(1).Book an appointment\n(2).Cancel appointment\n(3).Log out");
+                System.out.println("\n>> Select an option:\n(1).Create an appointment\n(2).Show appointment\n(3).Log out");
                 System.out.print("Your option: ");
                 response = scan.nextInt();
 
                 switch (response) {
                     case 1:
-                        String month = getMonth();
-                        System.out.println("Your month: " + month);
+//                        String month = getMonth(); // getTime()
+//                        System.out.println("Your month: " + month);
+                        Doctor.AvailableAppointment appointment = new users.Doctor.AvailableAppointment(new Date(), "4pm");
+                        doctor.addNewAppointment(appointment);
+                        System.out.println("**NEW APPOINTMENT SAVED**");
                         break;
                     case 2:
-                        System.out.println("**CANCELING**");
+                        doctor.showAvailableAppointments();
                         break;
                     case optionsLength:
                         Auth.logout();

@@ -26,7 +26,7 @@ public class Doctor extends User {
         @Override
         public String toString() {
             return "AvailableAppointment{" +
-                    ", date=" + date +
+                    "date=" + date +
                     ", time='" + time + '\'' +
                     '}';
         }
