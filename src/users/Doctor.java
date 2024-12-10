@@ -23,20 +23,12 @@ public class Doctor extends User {
             this.time = time;
         }
 
-        public Date getDate() {
-            return date;
-        }
-
-        public void setDate(Date date) {
-            this.date = date;
-        }
-
-        public String getTime() {
-            return time;
-        }
-
-        public void setTime(String time) {
-            this.time = time;
+        @Override
+        public String toString() {
+            return "AvailableAppointment{" +
+                    ", date=" + date +
+                    ", time='" + time + '\'' +
+                    '}';
         }
     }
 
@@ -47,7 +39,7 @@ public class Doctor extends User {
     public void showAvailableAppointments() {
         System.out.println("Available appointments");
         for (AvailableAppointment availableAppointment : availableAppointments) {
-            System.out.println(availableAppointment.getDate() + " " + availableAppointment.getTime());
+            System.out.println(availableAppointment.toString());
         }
     }
 
