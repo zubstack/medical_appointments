@@ -5,6 +5,7 @@ import users.Doctor;
 import users.Patient;
 import users.User;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class UIMenu {
@@ -20,83 +21,100 @@ public class UIMenu {
 
 
     public void showMenu() {
-        int response;
+        int response = 0;
         final int optionsLength = 3;
         System.out.println("Welcome to Medical Appointments");
         do {
-            System.out.println(">> Please, select an option:\n(1).Login\n(2).Sign up\n(3).Exit");
-            System.out.print("Your option: ");
-            response = scan.nextInt();
+            try {
+                System.out.println(">> Please, select an option:\n(1).Login\n(2).Sign up\n(3).Exit");
+                System.out.print("Your option: ");
+                response = scan.nextInt();
 
-            switch (response) {
-                case 1:
-                    login();
-                    break;
-                case 2:
-                    registerUser();
-                    break;
-                case optionsLength:
-                    System.out.println("Thank you for you visit!.");
-                    System.out.println();
-                    break;
-                case 4:
-                    showDevMenu();
-                    break;
-                default:
-                    System.out.println("Invalid option.");
+                switch (response) {
+                    case 1:
+                        login();
+                        break;
+                    case 2:
+                        registerUser();
+                        break;
+                    case optionsLength:
+                        System.out.println("Thank you for you visit!.");
+                        System.out.println();
+                        break;
+                    case 4:
+                        showDevMenu();
+                        break;
+                    default:
+                        System.out.println("Invalid option.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("[ERROR]: Please insert a number as your option.");
+                scan.next();  // Consume the invalid input
             }
+
         } while (response != optionsLength);
     }
 
     private void showPatientMenu() {
-        int response;
+        int response = 0;
         final int optionsLength = 3;
         System.out.println("Welcome unknown patient!");
         do {
-            System.out.println(">> Select an option:\n(1).Book an appointment\n(2).Cancel appointment\n(3).Exit");
-            System.out.print("Your option: ");
-            response = scan.nextInt();
+            try{
+                System.out.println(">> Select an option:\n(1).Book an appointment\n(2).Cancel appointment\n(3).Exit");
+                System.out.print("Your option: ");
+                response = scan.nextInt();
 
-            switch (response) {
-                case 1:
-                    String month = getMonth();
-                    System.out.println("Your month: " + month);
-                    break;
-                case 2:
-                    System.out.println("** CANCELING **");
-                    break;
-                case optionsLength:
-                    System.out.println("Good bye unknown patient!.");
-                    System.out.println();
-                    break;
-                default:
-                    System.out.println("Invalid option.");
+                switch (response) {
+                    case 1:
+                        String month = getMonth();
+                        System.out.println("Your month: " + month);
+                        break;
+                    case 2:
+                        System.out.println("** CANCELING **");
+                        break;
+                    case optionsLength:
+                        System.out.println("Good bye unknown patient!.");
+                        System.out.println();
+                        break;
+                    default:
+                        System.out.println("Invalid option.");
+                }
+            }catch (InputMismatchException e) {
+                System.out.println("[ERROR]: Please insert a number as your option.");
+                scan.next();  // Consume the invalid input
             }
         } while (response != optionsLength);
     }
 
     private void showDevMenu() {
-        int response;
+        int response = 0;
         final int optionsLength = 3;
         System.out.println("DEV MENU");
         do {
-            System.out.println(">> Select an option:\n(1).Show users\n(2).Show auths\n(3).Exit");
-            System.out.print("Your option: ");
-            response = scan.nextInt();
+            try {
+                System.out.println(">> Select an option:\n(1).Show users\n(2).Show auths\n(3).Exit");
+                System.out.print("Your option: ");
+                response = scan.nextInt();
 
-            switch (response) {
-                case 1:
-                    User.showUsers();
-                    break;
-                case 2:
-                    Auth.showAuths();
-                    break;
-                case optionsLength:
-                    System.out.println();
-                    break;
-                default:
-                    System.out.println("INVALID OPTION");
+                switch (response) {
+                    case 1:
+                        User.showUsers();
+                        break;
+                    case 2:
+                        Auth.showAuths();
+                        break;
+                    case optionsLength:
+                        System.out.println();
+                        break;
+                    default:
+                        System.out.println("INVALID OPTION");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("[ERROR]: Please insert a number as your option.");
+                scan.next();  // Consume the invalid input
             }
+
         } while (response != optionsLength);
     }
 
@@ -121,12 +139,17 @@ public class UIMenu {
         String phoneNumber;
 
         System.out.println(">> Registration. Please help us with some information");
-        int response;
+        int response = 0;
         do {
-            System.out.println("What are you?:\n(1).Doctor\n(2).Patient");
-            System.out.print("Your option: ");
-            response = scan.nextInt();
-            scan.nextLine();
+            try{
+                System.out.println("What are you?:\n(1).Doctor\n(2).Patient");
+                System.out.print("Your option: ");
+                response = scan.nextInt();
+                scan.nextLine();
+            } catch (InputMismatchException e) {
+                System.out.println("[ERROR]: Please insert a number as your option.");
+                scan.next();  // Consume the invalid input
+            }
         } while (response < 1 || response > 2);
 
         System.out.print("Name: ");
@@ -169,7 +192,7 @@ public class UIMenu {
         User.registerUser(patient);
         registerNewAuth(patient.getId());
 
-        System.out.println("OPERATION SUCCEED: New "+ patient.getClass().getSimpleName()+" has been registered.");
+        System.out.println("OPERATION SUCCEED: New " + patient.getClass().getSimpleName() + " has been registered.");
         System.out.println();
     }
 
@@ -183,7 +206,7 @@ public class UIMenu {
         User.registerUser(doctor);
         registerNewAuth(doctor.getId());
 
-        System.out.println("OPERATION SUCCEED: New "+ doctor.getClass().getSimpleName()+" has been registered.");
+        System.out.println("OPERATION SUCCEED: New " + doctor.getClass().getSimpleName() + " has been registered.");
         System.out.println();
     }
 
@@ -217,3 +240,5 @@ public class UIMenu {
     }
 
 }
+
+//TODO: Abstract menus, book an appointment functionality, USE CASE diagram
