@@ -58,4 +58,9 @@ public class Doctor extends User {
     public void setSpeciality(String speciality) {
         this.speciality = speciality;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() +  " Speciality: " + getSpeciality();
+    }
 }

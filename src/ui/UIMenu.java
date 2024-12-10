@@ -57,12 +57,12 @@ public class UIMenu {
                 switch (response) {
                     case 1:
                         if (login()) {
-                            System.out.println("**USER LOGGED IN**");
+                            System.out.println("\n**USER LOGGED IN**");
                             response = optionsLength;
                         }
                         break;
                     case 2:
-                        registerUser();
+                        registerNewUser();
                         break;
                     case optionsLength:
                         System.out.println("**THANK YOU FOR YOUR VISIT**");
@@ -86,7 +86,7 @@ public class UIMenu {
     private void showPatientMenu(User user) {
         int response = 0;
         final int optionsLength = 3;
-        System.out.println("**WELCOME, " + user.getName()+"**");
+        System.out.println("**WELCOME, " + user.getName() + "**");
         do {
             try {
                 System.out.println("\n>> Select an option:\n(1).Book an appointment\n(2).Cancel appointment\n(3).Log out");
@@ -103,7 +103,7 @@ public class UIMenu {
                         break;
                     case optionsLength:
                         Auth.logout();
-                        System.out.println("**LOGGING OUT**");
+                        System.out.println("\n**LOGGING OUT**");
                         System.out.println();
                         break;
                     default:
@@ -120,7 +120,7 @@ public class UIMenu {
     private void showDoctorMenu(User user) {
         int response = 0;
         final int optionsLength = 3;
-        System.out.println("\n**WELCOME, " + user.getName()+"**");
+        System.out.println("\n**WELCOME, " + user.getName() + "**");
         do {
             try {
                 System.out.println("\n>> Select an option:\n(1).Book an appointment\n(2).Cancel appointment\n(3).Log out");
@@ -137,7 +137,7 @@ public class UIMenu {
                         break;
                     case optionsLength:
                         Auth.logout();
-                        System.out.println("**LOGGING OUT**");
+                        System.out.println("\n**LOGGING OUT**");
                         System.out.println();
                         break;
                     default:
@@ -153,7 +153,7 @@ public class UIMenu {
     private void showDevMenu() {
         int response = 0;
         final int optionsLength = 3;
-        System.out.println("**DEV MENU**");
+        System.out.println("\n**DEV MENU**");
         do {
             try {
                 System.out.println("\n>> Select an option:\n(1).Show users\n(2).Show auths\n(3).Exit");
@@ -195,7 +195,7 @@ public class UIMenu {
         return MONTHS[response];
     }
 
-    private void registerUser() {
+    private void registerNewUser() {
         String name;
         String email;
         String address;
@@ -261,7 +261,7 @@ public class UIMenu {
         Patient patient = new Patient(name, email, address, phoneNumber, birthday, weight, height, blood);
         User.registerNewUser(patient, username, password);
 
-        System.out.println("**OPERATION SUCCEED: New " + patient.getClass().getSimpleName() + " has been registered.**");
+        System.out.println("\n**OPERATION SUCCEED: New " + patient.getClass().getSimpleName() + " has been registered.**");
         System.out.println();
     }
 
@@ -281,22 +281,9 @@ public class UIMenu {
         Doctor doctor = new Doctor(name, email, address, phoneNumber, speciality);
         User.registerNewUser(doctor, username, password);
 
-        System.out.println("**OPERATION SUCCEED: New " + doctor.getClass().getSimpleName() + " has been registered.**");
+        System.out.println("\n**OPERATION SUCCEED: New " + doctor.getClass().getSimpleName() + " has been registered.**");
         System.out.println();
     }
-
-//    private void registerNewAuth(String userId) {
-//        System.out.println("\n>> Register your credentials");
-//        String username;
-//        String password;
-//
-//        System.out.print("Username: ");
-//        username = scan.nextLine().trim();
-//        System.out.print("Password: ");
-//        password = scan.nextLine().trim();
-//
-//
-//    }
 
     private boolean login() {
         scan.nextLine();
