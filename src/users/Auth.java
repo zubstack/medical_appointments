@@ -9,6 +9,7 @@ public class Auth {
     final private String password;
 
     static ArrayList<Auth> auths = new ArrayList<>();
+    static private User currentUser;
 
     public Auth(String username, String userId, String password) {
         this.password = password;
@@ -21,7 +22,6 @@ public class Auth {
     }
 
     static public void showAuths() {
-
         for (Auth auth : auths) {
             System.out.println("Auth: " + auth.username);
         }
@@ -48,12 +48,13 @@ public class Auth {
         return userId;
     }
 
-    static public void login(String username, String password) {
+    static public boolean login(String username, String password) {
         try {
             Auth auth = Auth.findAuthByUsername(username);
             User user = User.findUserById(auth.getUserId());
             if (auth.getPassword().equals(password)) {
-                System.out.println("USER LOGGED IN: " + user.getName());
+                currentUser = user;
+                return true;
             } else {
                 throw new Exception("");
             }
@@ -62,6 +63,16 @@ public class Auth {
             System.out.println("[ERROR]: Invalid username or password");
         }
 
+        return false;
     }
+
+    static public void logout(){
+        currentUser =  null;
+    }
+
+    static public User getCurrentUser() {
+        return currentUser;
+    }
+
 
 }
