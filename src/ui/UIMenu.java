@@ -1,9 +1,9 @@
 package ui;
 
-import users.Auth;
-import users.Doctor;
-import users.Patient;
-import users.User;
+import model.Auth;
+import model.Doctor;
+import model.Patient;
+import model.User;
 
 import java.util.Date;
 import java.util.InputMismatchException;
@@ -133,7 +133,7 @@ public class UIMenu {
                     case 1:
 //                        String month = getMonth(); // getTime()
 //                        System.out.println("Your month: " + month);
-                        Doctor.AvailableAppointment appointment = new users.Doctor.AvailableAppointment(new Date(), "4pm");
+                        Doctor.AvailableAppointment appointment = new model.Doctor.AvailableAppointment(new Date(), "4pm");
                         doctor.addNewAppointment(appointment);
                         System.out.println("**NEW APPOINTMENT SAVED**");
                         break;

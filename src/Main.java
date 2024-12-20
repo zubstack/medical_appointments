@@ -1,11 +1,11 @@
 //import java.util.Date;
 
 import ui.UIMenu;
-import users.Doctor;
-import users.Patient;
+import model.Doctor;
+import model.Patient;
 
 import java.util.Scanner;
-import static users.User.registerNewUser;
+import static model.User.registerNewUser;
 
 
 public class Main {
