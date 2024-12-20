@@ -1,9 +1,6 @@
 package ui;
 
-import model.Auth;
-import model.Doctor;
-import model.Patient;
-import model.User;
+import model.*;
 
 import java.util.Date;
 import java.util.InputMismatchException;
@@ -41,6 +38,9 @@ public class UIMenu {
                 break;
             case "Patient":
                 showPatientMenu((Patient) user);
+                break;
+            case "Nurse":
+                showNurseMenu((Nurse) user);
                 break;
         }
     }
@@ -155,6 +155,38 @@ public class UIMenu {
         } while (response != options.length);
     }
 
+    private void showNurseMenu(Nurse nurse) {
+        int response = 0;
+        String[] options = new String[]{"Create an appointment", "Show appointment", "Log out"};
+
+        System.out.println("\n**WELCOME, " + nurse.getName() + "**");
+        do {
+            try {
+                showOptions(options);
+                response = scan.nextInt();
+
+                switch (response) {
+                    case 1:
+                        System.out.println("**NEW APPOINTMENT SAVED**");
+                        break;
+                    case 2:
+                        System.out.println("**SHOW AVAILABLE APPOINTMENTS**");
+                        break;
+                    case 3:
+                        Auth.logout();
+                        System.out.println("\n**LOGGING OUT**");
+                        System.out.println();
+                        break;
+                    default:
+                        System.out.println("[ERROR]: Invalid option.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("[ERROR]: Please insert a number as your option.");
+                scan.next();  // Consume the invalid input
+            }
+        } while (response != options.length);
+    }
+
     private void showDevMenu() {
         int response = 0;
         String[] options = new String[]{"Show users", "Show auths", "Exit"};
@@ -207,17 +239,17 @@ public class UIMenu {
 
         System.out.println("\n>> Registration. Please help us with some information");
         int response = 0;
+        String[] options = new String[]{"Doctor", "Patient", "Nurse"};
         do {
             try {
-                System.out.println("What are you?:\n(1).Doctor\n(2).Patient");
-                System.out.print("Your option: ");
+                showOptions("What are you?", options);
                 response = scan.nextInt();
                 scan.nextLine();
             } catch (InputMismatchException e) {
                 System.out.println("[ERROR]: Please insert a number as your option.");
                 scan.next();  // Consume the invalid input
             }
-        } while (response < 1 || response > 2);
+        } while (response < 1 || response > options.length);
 
         System.out.print("Name: ");
         name = scan.nextLine();
@@ -230,11 +262,15 @@ public class UIMenu {
 
         switch (response) {
             case 1:
-                registerNewDoctor(name, email, address, phoneNumber);
+                showRegisterNewDoctorMenu(name, email, address, phoneNumber);
                 break;
             case 2:
-                registerNewPatient(name, email, address, phoneNumber);
+                showRegisterNewPatientMenu(name, email, address, phoneNumber);
                 break;
+            case 3:
+                showRegisterNewNurseMenu(name, email, address, phoneNumber);
+                break;
+
         }
 
     }
@@ -253,15 +289,7 @@ public class UIMenu {
         return Auth.login(username, password);
     }
 
-    public void showOptions(String[] options) {
-        System.out.println("\n>> Please, select an option:");
-        for (int i = 0; i < options.length; i++) {
-            System.out.printf("\n(%d). %s", i + 1, options[i]);
-        }
-        System.out.print("\nYour option: ");
-    }
-
-    private void registerNewPatient(String name, String email, String address, String phoneNumber) {
+    private void showRegisterNewPatientMenu (String name, String email, String address, String phoneNumber) {
         String birthday;
         String blood;
         double weight;
@@ -291,7 +319,7 @@ public class UIMenu {
         System.out.println();
     }
 
-    private void registerNewDoctor(String name, String email, String address, String phoneNumber) {
+    private void  showRegisterNewDoctorMenu (String name, String email, String address, String phoneNumber) {
         String speciality;
         String username;
         String password;
@@ -309,6 +337,41 @@ public class UIMenu {
 
         System.out.println("\n**OPERATION SUCCEED: New " + doctor.getClass().getSimpleName() + " has been registered.**");
         System.out.println();
+    }
+
+    private void  showRegisterNewNurseMenu (String name, String email, String address, String phoneNumber) {
+        String speciality;
+        String username;
+        String password;
+
+        System.out.print("Speciality: ");
+        speciality = scan.nextLine();
+        System.out.println("\n>> Register your credentials");
+        System.out.print("Username: ");
+        username = scan.nextLine().trim();
+        System.out.print("Password: ");
+        password = scan.nextLine().trim();
+
+        Nurse nurse = new Nurse(name, email, address, phoneNumber, speciality);
+        User.registerNewUser(nurse, username, password);
+
+        System.out.println("\n**OPERATION SUCCEED: New " + nurse.getClass().getSimpleName() + " has been registered.**");
+        System.out.println();
+    }
+
+    public void showOptions(String[] options) {
+        System.out.println("\n>> Please, select an option:");
+        for (int i = 0; i < options.length; i++) {
+            System.out.printf("\n(%d). %s", i + 1, options[i]);
+        }
+        System.out.print("\nYour option: ");
+    }
+    public void showOptions(String instruction, String[] options) {
+        System.out.printf("\n>> %s:", instruction);
+        for (int i = 0; i < options.length; i++) {
+            System.out.printf("\n(%d). %s", i + 1, options[i]);
+        }
+        System.out.print("\nYour option: ");
     }
 
 }

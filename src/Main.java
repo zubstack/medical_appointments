@@ -1,5 +1,6 @@
 //import java.util.Date;
 
+import model.Nurse;
 import ui.UIMenu;
 import model.Doctor;
 import model.Patient;
@@ -22,6 +23,8 @@ public class Main {
         registerNewUser(patient2, "jess", "jess");
         Doctor doctor2 = new Doctor("Ulises", "email", "address", "098", "Pediatric");
         registerNewUser(doctor2, "uls", "uls");
+        Nurse nurse = new Nurse("Beatriz", "email", "address", "098", "Pediatric");
+        registerNewUser(nurse, "bet", "bet");
 
         // Show UI Menu
         uiMenu.showMenu();

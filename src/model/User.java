@@ -35,6 +35,12 @@ public abstract class User {
         Auth.registerNewAuth(auth);
     }
 
+    static public void registerNewUser(Nurse user, String username, String password) {
+        users.add(user);
+        Auth auth = new Auth(username, user.getId(), password);
+        Auth.registerNewAuth(auth);
+    }
+
     static public void showUsers() {
         for (User user : users) {
             System.out.println(user.toString());
