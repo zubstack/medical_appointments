@@ -3,7 +3,7 @@ package users;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class User {
+public abstract class User {
     final private String ID = UUID.randomUUID().toString();
     private String name;
     private String email;
