@@ -47,25 +47,25 @@ public class UIMenu {
 
     public boolean showWelcomeMenu() {
         int response = 0;
-        final int optionsLength = 3;
+        String[] options = new String[]{"Login", "Sign up", "Exit"};
+
         System.out.println("**WELCOME TO MEDICAL APPOINTMENTS**");
         do {
             try {
-                System.out.println("\n>> Please, select an option:\n(1).Login\n(2).Sign up\n(3).Exit");
-                System.out.print("Your option: ");
+                showOptions(options);
                 response = scan.nextInt();
 
                 switch (response) {
                     case 1:
-                        if (login()) {
+                        if (showLoginMenu()) {
                             System.out.println("\n**USER LOGGED IN**");
-                            response = optionsLength;
+                            response = options.length;
                         }
                         break;
                     case 2:
-                        registerNewUser();
+                        showRegistrationMenu();
                         break;
-                    case optionsLength:
+                    case 3:
                         System.out.println("**THANK YOU FOR YOUR VISIT**");
                         System.out.println();
                         return true;
@@ -80,18 +80,19 @@ public class UIMenu {
                 scan.next();  // Consume the invalid input
             }
 
-        } while (response != optionsLength);
+        } while (response != options.length);
         return false;
     }
 
     private void showPatientMenu(Patient patient) {
         int response = 0;
-        final int optionsLength = 3;
+        String[] options = new String[]{"Book an appointment", "Cancel appointment", "Log out"};
+
         System.out.println("**WELCOME, " + patient.getName() + "**");
         do {
             try {
-                System.out.println("\n>> Select an option:\n(1).Book an appointment\n(2).Cancel appointment\n(3).Log out");
-                System.out.print("Your option: ");
+
+                showOptions(options);
                 response = scan.nextInt();
 
                 switch (response) {
@@ -102,7 +103,7 @@ public class UIMenu {
                     case 2:
                         System.out.println("**CANCELING**");
                         break;
-                    case optionsLength:
+                    case 3:
                         Auth.logout();
                         System.out.println("\n**LOGGING OUT**");
                         System.out.println();
@@ -114,18 +115,18 @@ public class UIMenu {
                 System.out.println("[ERROR]: Please insert a number as your option.");
                 scan.next();  // Consume the invalid input
             }
-        } while (response != optionsLength);
+        } while (response != options.length);
 
     }
 
     private void showDoctorMenu(Doctor doctor) {
         int response = 0;
-        final int optionsLength = 3;
+        String[] options = new String[]{"Create an appointment", "Show appointment", "Log out"};
+
         System.out.println("\n**WELCOME, " + doctor.getName() + "**");
         do {
             try {
-                System.out.println("\n>> Select an option:\n(1).Create an appointment\n(2).Show appointment\n(3).Log out");
-                System.out.print("Your option: ");
+                showOptions(options);
                 response = scan.nextInt();
 
                 switch (response) {
@@ -139,7 +140,7 @@ public class UIMenu {
                     case 2:
                         doctor.showAvailableAppointments();
                         break;
-                    case optionsLength:
+                    case 3:
                         Auth.logout();
                         System.out.println("\n**LOGGING OUT**");
                         System.out.println();
@@ -151,17 +152,16 @@ public class UIMenu {
                 System.out.println("[ERROR]: Please insert a number as your option.");
                 scan.next();  // Consume the invalid input
             }
-        } while (response != optionsLength);
+        } while (response != options.length);
     }
 
     private void showDevMenu() {
         int response = 0;
-        final int optionsLength = 3;
+        String[] options = new String[]{"Show users", "Show auths", "Exit"};
         System.out.println("\n**DEV MENU**");
         do {
             try {
-                System.out.println("\n>> Select an option:\n(1).Show users\n(2).Show auths\n(3).Exit");
-                System.out.print("Your option: ");
+                showOptions(options);
                 response = scan.nextInt();
 
                 switch (response) {
@@ -171,7 +171,7 @@ public class UIMenu {
                     case 2:
                         Auth.showAuths();
                         break;
-                    case optionsLength:
+                    case 3:
                         System.out.println();
                         break;
                     default:
@@ -182,7 +182,7 @@ public class UIMenu {
                 scan.next();  // Consume the invalid input
             }
 
-        } while (response != optionsLength);
+        } while (response != options.length);
     }
 
     private String getMonth() {
@@ -199,7 +199,7 @@ public class UIMenu {
         return MONTHS[response];
     }
 
-    private void registerNewUser() {
+    private void showRegistrationMenu() {
         String name;
         String email;
         String address;
@@ -237,6 +237,28 @@ public class UIMenu {
                 break;
         }
 
+    }
+
+    private boolean showLoginMenu() {
+        scan.nextLine();
+        System.out.println("\n>> Enter your credentials");
+        String username;
+        String password;
+
+        System.out.print("Username: ");
+        username = scan.nextLine().trim();
+        System.out.print("Password: ");
+        password = scan.nextLine().trim();
+
+        return Auth.login(username, password);
+    }
+
+    public void showOptions(String[] options) {
+        System.out.println("\n>> Please, select an option:");
+        for (int i = 0; i < options.length; i++) {
+            System.out.printf("\n(%d). %s", i + 1, options[i]);
+        }
+        System.out.print("\nYour option: ");
     }
 
     private void registerNewPatient(String name, String email, String address, String phoneNumber) {
@@ -287,20 +309,6 @@ public class UIMenu {
 
         System.out.println("\n**OPERATION SUCCEED: New " + doctor.getClass().getSimpleName() + " has been registered.**");
         System.out.println();
-    }
-
-    private boolean login() {
-        scan.nextLine();
-        System.out.println("\n>> Enter your credentials");
-        String username;
-        String password;
-
-        System.out.print("Username: ");
-        username = scan.nextLine().trim();
-        System.out.print("Password: ");
-        password = scan.nextLine().trim();
-
-        return Auth.login(username, password);
     }
 
 }
