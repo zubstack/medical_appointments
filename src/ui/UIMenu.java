@@ -82,8 +82,8 @@ public class UIMenu {
                     default:
                         System.out.println("[ERROR]: Invalid option.");
                 }
-            } catch (InputMismatchException e) {
-                System.out.println("[ERROR]: Please insert a number as your option.");
+            } catch (Exception e) {
+                System.out.println("[ERROR]: Please insert values according the field");
                 scan.next();  // Consume the invalid input
             }
 
