@@ -162,4 +162,41 @@ public class UIMenu {
         System.out.print("\nYour option: ");
     }
 
+    public static int getMonth(Scanner scan) {
+        int response;
+        final int min = 0;
+        final int max = 3;
+        do {
+            System.out.println("\n>> Select a month from " + MONTHS[min]  + " to" + MONTHS[max]);
+            for (int i = min; i < max; i++) {
+                System.out.printf("(%d).%s\n", i + 1, MONTHS[i]);
+            }
+            System.out.print("Your option: ");
+            response = scan.nextInt();
+        } while (response < min + 1 || response > max);
+        return (response -1);
+    }
+
+    public static int getDay(Scanner scan) {
+        int response;
+        final int min = 1;
+        final int max = 27;
+        do {
+            System.out.println("\n>> Insert a day from " + min  + " to" + max + ": ");
+            response = scan.nextInt();
+        } while (response < min || response > max);
+        return (response);
+    }
+
+    public static int getYear(Scanner scan) {
+        int response;
+        final int min = 2024;
+        final int max = 2025;
+        do {
+            System.out.println("\n>> Insert a year from " + min  + " to" + max + ": ");
+            response = scan.nextInt();
+        } while (response < min || response > max);
+        return (response);
+    }
+
 }

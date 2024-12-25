@@ -7,7 +7,7 @@ import model.User;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import static ui.UIMenu.MONTHS;
+import static ui.UIMenu.getMonth;
 
 public class UIPatientMenu {
     private final Scanner scan;
@@ -28,7 +28,7 @@ public class UIPatientMenu {
 
                 switch (response) {
                     case 1:
-                        String month = getMonth();
+                        int month = getMonth(scan);
                         System.out.println("Your month: " + month);
                         break;
                     case 2:
@@ -78,20 +78,6 @@ public class UIPatientMenu {
 
         System.out.println("\n**OPERATION SUCCEED: New " + patient.getClass().getSimpleName() + " has been registered.**");
         System.out.println();
-    }
-
-    public  String getMonth() {
-        int response;
-        final int optionsLength = 3;
-        do {
-            System.out.println("\n>> Select a month:");
-            for (int i = 0; i < optionsLength; i++) {
-                System.out.printf("(%d).%s\n", i + 1, MONTHS[i]);
-            }
-            System.out.print("Your option: ");
-            response = scan.nextInt();
-        } while (response < 1 || response > optionsLength);
-        return MONTHS[response -1];
     }
 
 }
