@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import static ui.UIMenu.message;
 import static ui.UIMenu.showOptions;
 
 public class UIDoctorMenu {
@@ -22,7 +23,7 @@ public class UIDoctorMenu {
         int response = 0;
         String[] options = new String[]{"Create an appointment", "Show my available appointments", "Show my pending appointments", "Cancel an appointment", "Log out"};
 
-        System.out.println("\n**WELCOME, " + doctor.getName() + "**");
+        message.info("WELCOME, Dr. " + doctor.getName());
         do {
             try {
                 showOptions(options);
@@ -36,20 +37,20 @@ public class UIDoctorMenu {
                         showAvailableAppointments(doctor);
                         break;
                     case 3:
-                        System.out.println("**Show pending appointments**");
+                        message.info("Show pending appointments");
                         break;
                     case 4:
-                        System.out.println("**Cancel appointment**");
+                        message.info("Cancel appointment");
                         break;
                     case 5:
                         Auth.logout();
-                        System.out.println("**LOGGING OUT**");
+                        message.info("LOGGING OUT");
                         break;
                     default:
-                        System.out.println("[ERROR]: Invalid option.");
+                        message.error("Invalid option.");
                 }
             } catch (InputMismatchException e) {
-                System.out.println("[ERROR]: Please insert a number as your option.");
+                message.error("Please insert a number as your option.");
                 scan.next();  // Consume the invalid input
             }
         } while (response != options.length);
@@ -62,7 +63,7 @@ public class UIDoctorMenu {
 
         System.out.print("Speciality: ");
         speciality = scan.nextLine();
-        System.out.println("\n>> Register your credentials");
+        message.prompt("Register your credentials: ");
         System.out.print("Username: ");
         username = scan.nextLine().trim();
         System.out.print("Password: ");
@@ -71,7 +72,7 @@ public class UIDoctorMenu {
         Doctor doctor = new Doctor(name, email, address, phoneNumber, speciality);
         User.registerNewUser(doctor, username, password);
 
-        System.out.println("\n**OPERATION SUCCEED: New " + doctor.getClass().getSimpleName() + " has been registered.**");
+        message.info("New " + doctor.getClass().getSimpleName() + " has been registered.");
     }
 
     public void showCreateAppointmentMenu(Doctor doctor) {
@@ -81,7 +82,7 @@ public class UIDoctorMenu {
 
         Doctor.AvailableAppointment appointment = new model.Doctor.AvailableAppointment(date, time, doctor);
         doctor.addNewAppointment(appointment);
-        System.out.println("**New appointment created **");
+        message.info("New appointment created ");
     }
 
     public void showAvailableAppointments(Doctor doctor) {

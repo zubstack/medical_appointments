@@ -7,12 +7,14 @@ import model.User;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import static ui.UIMenu.message;
 import static ui.UIMenu.showOptions;
 
 public class UINurseMenu {
 
     private final Scanner scan;
-    public UINurseMenu (Scanner scan){
+
+    public UINurseMenu(Scanner scan) {
         this.scan = scan;
     }
 
@@ -20,7 +22,7 @@ public class UINurseMenu {
         int response = 0;
         String[] options = new String[]{"Create an appointment", "Show appointment", "Log out"};
 
-        System.out.println("\n**WELCOME, " + nurse.getName() + "**");
+        message.info("WELCOME, " + nurse.getName());
         do {
             try {
                 showOptions(options);
@@ -28,34 +30,33 @@ public class UINurseMenu {
 
                 switch (response) {
                     case 1:
-                        System.out.println("**NEW APPOINTMENT SAVED**");
+                        message.info("NEW APPOINTMENT SAVED");
                         break;
                     case 2:
-                        System.out.println("**SHOW AVAILABLE APPOINTMENTS**");
+                        message.info("SHOW AVAILABLE APPOINTMENTS");
                         break;
                     case 3:
                         Auth.logout();
-                        System.out.println("\n**LOGGING OUT**");
-                        System.out.println();
+                        message.info("LOGGING OUT");
                         break;
                     default:
-                        System.out.println("[ERROR]: Invalid option.");
+                        message.error("Invalid option.");
                 }
             } catch (InputMismatchException e) {
-                System.out.println("[ERROR]: Please insert a number as your option.");
+                message.error("Please insert a number as your option.");
                 scan.next();  // Consume the invalid input
             }
         } while (response != options.length);
     }
 
-    public void  showRegistrationMenu (String name, String email, String address, String phoneNumber) {
+    public void showRegistrationMenu(String name, String email, String address, String phoneNumber) {
         String speciality;
         String username;
         String password;
 
         System.out.print("Speciality: ");
         speciality = scan.nextLine();
-        System.out.println("\n>> Register your credentials");
+        message.prompt("Register your credentials");
         System.out.print("Username: ");
         username = scan.nextLine().trim();
         System.out.print("Password: ");
@@ -64,7 +65,7 @@ public class UINurseMenu {
         Nurse nurse = new Nurse(name, email, address, phoneNumber, speciality);
         User.registerNewUser(nurse, username, password);
 
-        System.out.println("\n**OPERATION SUCCEED: New " + nurse.getClass().getSimpleName() + " has been registered.**");
+        message.info("New " + nurse.getClass().getSimpleName() + " has been registered.");
         System.out.println();
     }
 }

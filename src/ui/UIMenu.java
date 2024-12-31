@@ -11,6 +11,8 @@ public class UIMenu {
             "July", "August", "September", "October", "November", "December"
     };
     final private Scanner scan;
+    static UIMessage message;
+
     private final UIDoctorMenu uiDoctorMenu;
     private final UIPatientMenu uiPatientMenu;
     private final UIDevMenu uiDevMenu;
@@ -18,6 +20,7 @@ public class UIMenu {
 
     public UIMenu(Scanner scan) {
         this.scan = scan;
+        message = new UIMessage();
         this.uiDoctorMenu = new UIDoctorMenu(scan);
         this.uiPatientMenu = new UIPatientMenu(scan);
         this.uiDevMenu = new UIDevMenu(scan);
@@ -56,7 +59,7 @@ public class UIMenu {
         int response = 0;
         String[] options = new String[]{"Login", "Sign up", "Exit"};
 
-        System.out.println("**WELCOME TO MEDICAL APPOINTMENTS**");
+        message.info("MEDICAL APPOINTMENTS");
         do {
             try {
                 showOptions(options);
@@ -65,7 +68,6 @@ public class UIMenu {
                 switch (response) {
                     case 1:
                         if (showLoginMenu()) {
-                            System.out.println("\n**USER LOGGED IN**");
                             response = options.length;
                         }
                         break;
@@ -73,30 +75,30 @@ public class UIMenu {
                         showRegistrationMenu();
                         break;
                     case 3:
-                        System.out.println("**THANK YOU FOR YOUR VISIT**");
-                        System.out.println();
+                        message.info("THANK YOU FOR YOUR VISIT.");
                         return true;
                     case 4:
                         uiDevMenu.showDevMenu();
                         break;
                     default:
-                        System.out.println("[ERROR]: Invalid option.");
+                        message.error("Invalid option.");
                 }
             } catch (Exception e) {
-                System.out.println("[ERROR]: Please insert values according the field");
+                message.error("Please insert values according the field.");
                 scan.next();  // Consume the invalid input
             }
 
         } while (response != options.length);
         return false;
     }
+
     private void showRegistrationMenu() {
         String name;
         String email;
         String address;
         String phoneNumber;
 
-        System.out.println("\n>> Registration. Please help us with some information");
+        message.prompt("Registration. Please help us with some information: ");
         int response = 0;
         String[] options = new String[]{"Doctor", "Patient", "Nurse"};
         do {
@@ -105,7 +107,7 @@ public class UIMenu {
                 response = scan.nextInt();
                 scan.nextLine();
             } catch (InputMismatchException e) {
-                System.out.println("[ERROR]: Please insert a number as your option.");
+                message.error("Please insert values according the field.");
                 scan.next();  // Consume the invalid input
             }
         } while (response < 1 || response > options.length);
@@ -135,7 +137,7 @@ public class UIMenu {
 
     private boolean showLoginMenu() {
         scan.nextLine();
-        System.out.println("\n>> Enter your credentials");
+        message.prompt("Enter your credentials");
         String username;
         String password;
 
@@ -148,18 +150,19 @@ public class UIMenu {
     }
 
     public static void showOptions(String[] options) {
-        System.out.println("\n>> Please, select an option:");
+        message.prompt("Please, select an option:");
         for (int i = 0; i < options.length; i++) {
             System.out.printf("\n(%d). %s", i + 1, options[i]);
         }
-        System.out.print("\nYour option: ");
+        message.option();
     }
+
     public static void showOptions(String instruction, String[] options) {
-        System.out.printf("\n>> %s:", instruction);
+        message.prompt(instruction + ": ");
         for (int i = 0; i < options.length; i++) {
             System.out.printf("\n(%d). %s", i + 1, options[i]);
         }
-        System.out.print("\nYour option: ");
+        message.option();
     }
 
     public static int getMonth(Scanner scan) {
@@ -167,14 +170,14 @@ public class UIMenu {
         final int min = 0;
         final int max = 3;
         do {
-            System.out.println("\n>> Select a month from " + MONTHS[min]  + " to" + MONTHS[max]);
+            message.prompt("Select a month from " + MONTHS[min] + " to" + MONTHS[max]);
             for (int i = min; i < max; i++) {
                 System.out.printf("(%d).%s\n", i + 1, MONTHS[i]);
             }
-            System.out.print("Your option: ");
+            message.option();
             response = scan.nextInt();
         } while (response < min + 1 || response > max);
-        return (response -1);
+        return (response - 1);
     }
 
     public static int getDay(Scanner scan) {
@@ -182,7 +185,7 @@ public class UIMenu {
         final int min = 1;
         final int max = 27;
         do {
-            System.out.println("\n>> Insert a day from " + min  + " to" + max + ": ");
+            message.prompt("Insert a day from " + min + " to" + max + ": ");
             response = scan.nextInt();
         } while (response < min || response > max);
         return (response);
@@ -193,7 +196,7 @@ public class UIMenu {
         final int min = 2024;
         final int max = 2025;
         do {
-            System.out.println("\n>> Insert a year from " + min  + " to" + max + ": ");
+            message.prompt("Insert a year from " + min + " to" + max + ": ");
             response = scan.nextInt();
         } while (response < min || response > max);
         return (response);

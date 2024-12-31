@@ -54,7 +54,7 @@ public class Patient extends User {
 
     public void showBookedAppointments() {
         for (BookedAppointment bookedAppointment : bookedAppointments) {
-            System.out.println(bookedAppointment);
+            System.out.println("\n" + bookedAppointment);
         }
     }
 

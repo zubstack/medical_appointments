@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import static ui.UIMenu.message;
+
 public class UIPatientMenu {
     private final Scanner scan;
     private final ArrayList<Doctor> availableDoctors = new ArrayList<>();
@@ -20,8 +22,7 @@ public class UIPatientMenu {
     public void showMenu(Patient patient) {
         int response = 0;
         String[] options = new String[]{"Book an appointment", "Show my booked appointments", "Cancel appointment", "Log out"};
-
-        System.out.println("**WELCOME, " + patient.getName() + "**");
+        message.info("WELCOME, " + patient.getName());
         do {
             try {
 
@@ -36,17 +37,17 @@ public class UIPatientMenu {
                         showBookedAppointments(patient);
                         break;
                     case 3:
-                        System.out.println("**Cancel appointment**");
+                        message.info("Cancel appointment");
                         break;
                     case 4:
                         Auth.logout();
-                        System.out.println("\n**LOGGING OUT**");
+                        message.info("LOGGING OUT");
                         break;
                     default:
-                        System.out.println("[ERROR]: Invalid option.");
+                        message.error("Invalid option.");
                 }
             } catch (InputMismatchException e) {
-                System.out.println("[ERROR]: Please insert a number as your option.");
+                message.error("Please insert a number as your option.");
                 scan.next();  // Consume the invalid input
             }
         } while (response != options.length);
@@ -70,7 +71,8 @@ public class UIPatientMenu {
         System.out.print("Height: ");
         height = scan.nextDouble();
         scan.nextLine();
-        System.out.println("\n>> Register your credentials");
+
+        message.prompt("Register your credentials");
         System.out.print("Username: ");
         username = scan.nextLine().trim();
         System.out.print("Password: ");
@@ -79,18 +81,17 @@ public class UIPatientMenu {
         Patient patient = new Patient(name, email, address, phoneNumber, birthday, weight, height, blood);
         User.registerNewUser(patient, username, password);
 
-        System.out.println("\n**OPERATION SUCCEED: New " + patient.getClass().getSimpleName() + " has been registered.**");
-        System.out.println();
+        message.info("New " + patient.getClass().getSimpleName() + " has been registered.");
     }
 
     void showBookAvailableAppointmentMenu(Patient patient) {
         int response = showAvailableAppointmentsMenu();
         bookSelectedAppointment(response, patient);
-        System.out.println("**APPOINTMENT BOOKED**");
+        message.info("APPOINTMENT BOOKED");
     }
 
     void showBookedAppointments(Patient patient) {
-        System.out.println("\nYour booked appointments:");
+        message.info("Your booked appointments: ");
         patient.showBookedAppointments();
     }
 
@@ -98,7 +99,7 @@ public class UIPatientMenu {
         int response;
         int max;
         do {
-            System.out.println("\n>> Please select one appointment to be booked: ");
+            message.prompt("Please select one appointment to be booked: ");
             max = showAllAvailableAppointments();
             System.out.print("\nYour option: ");
             response = scan.nextInt();
