@@ -85,9 +85,12 @@ public class UIPatientMenu {
     }
 
     void showBookAvailableAppointmentMenu(Patient patient) {
-        int response = showAvailableAppointmentsMenu();
-        bookSelectedAppointment(response, patient);
-        message.info("APPOINTMENT BOOKED");
+        Object selectedIndex = selectAnAppointment();
+        if(selectedIndex != null){
+            bookSelectedAppointment((int) selectedIndex, patient);
+            message.info("APPOINTMENT BOOKED");
+        }
+
     }
 
     void showBookedAppointments(Patient patient) {
@@ -95,24 +98,27 @@ public class UIPatientMenu {
         patient.showBookedAppointments();
     }
 
-    public int showAvailableAppointmentsMenu() {
-        int response;
+    public Object selectAnAppointment() {
+        int selectedIndex;
         int max;
         do {
             message.prompt("Please select one appointment to be booked: ");
-            max = showAllAvailableAppointments();
+            max = showAllAvailableAppointmentsMenu();
             System.out.print("\nYour option: ");
-            response = scan.nextInt();
-            //[PENDING]: User input control.
-        } while (response < 0 || response > max);
-        return response;
+            selectedIndex = scan.nextInt();
+        } while (selectedIndex < 0 || selectedIndex > max);
+        if(selectedIndex == max){
+            return null;
+        }else{
+            return selectedIndex;
+        }
     }
 
-    void bookSelectedAppointment(int response, Patient patient) {
+    void bookSelectedAppointment(int selectedIndex, Patient patient) {
         int i = 0;
         for (Doctor availableDoctor : availableDoctors) {
             for (Doctor.AvailableAppointment availableAppointment : availableDoctor.getAvailableAppointments()) {
-                if (i == response) {
+                if (i == selectedIndex) {
                     Patient.BookedAppointment newBookedAppointment = new Patient.BookedAppointment(availableAppointment, availableDoctor, patient);
                     patient.bookAppointment(newBookedAppointment);
                     availableDoctor.removeAvailableAAppointment(availableAppointment);
@@ -126,7 +132,7 @@ public class UIPatientMenu {
         }
     }
 
-    int showAllAvailableAppointments() {
+    int showAllAvailableAppointmentsMenu() {
         int i = 0;
         ArrayList<Doctor> doctors = User.getDoctors();
         for (Doctor doctor : doctors) {
@@ -137,7 +143,9 @@ public class UIPatientMenu {
         for (Doctor availableDoctor : availableDoctors) {
             i = availableDoctor.showAvailableAppointmentsInRow(i);
         }
-        return i-1;
+        // Exit option:
+        System.out.printf("\n(%d) %s\n", i, "Exit");
+        return i;
     }
 
 }

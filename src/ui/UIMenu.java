@@ -33,14 +33,14 @@ public class UIMenu {
         while (!CLOSE_APP) {
             User currentUser = Auth.getCurrentUser();
             if (currentUser != null) {
-                showUserMenu(currentUser);
+                showLoggedUserMenu(currentUser);
             } else {
-                CLOSE_APP = showWelcomeMenu();
+                CLOSE_APP = showInitialMenu();
             }
         }
     }
 
-    public void showUserMenu(User user) {
+    public void showLoggedUserMenu(User user) {
         String userClass = user.getClass().getSimpleName();
         switch (userClass) {
             case "Doctor":
@@ -55,7 +55,7 @@ public class UIMenu {
         }
     }
 
-    public boolean showWelcomeMenu() {
+    public boolean showInitialMenu() {
         int response = 0;
         String[] options = new String[]{"Login", "Sign up", "Exit"};
 
@@ -93,14 +93,9 @@ public class UIMenu {
     }
 
     private void showRegistrationMenu() {
-        String name;
-        String email;
-        String address;
-        String phoneNumber;
-
         message.prompt("Registration. Please help us with some information: ");
         int response = 0;
-        String[] options = new String[]{"Doctor", "Patient", "Nurse"};
+        String[] options = new String[]{"Doctor", "Patient", "Nurse", "Exit"};
         do {
             try {
                 showOptions("What are you?", options);
@@ -111,6 +106,17 @@ public class UIMenu {
                 scan.next();  // Consume the invalid input
             }
         } while (response < 1 || response > options.length);
+
+        if (response != options.length) {
+            showRegistrationFromOption(response);
+        }
+    }
+
+    private void showRegistrationFromOption(int response) {
+        String name;
+        String email;
+        String address;
+        String phoneNumber;
 
         System.out.print("Name: ");
         name = scan.nextLine();
@@ -132,7 +138,6 @@ public class UIMenu {
                 uiNurseMenu.showRegistrationMenu(name, email, address, phoneNumber);
                 break;
         }
-
     }
 
     private boolean showLoginMenu() {

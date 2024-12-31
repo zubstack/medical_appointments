@@ -70,7 +70,7 @@ public class Doctor extends User {
 
     public int showAvailableAppointmentsInRow(int i) {
         for (AvailableAppointment availableAppointment : availableAppointments) {
-            System.out.printf("\n[%d] %s\n", i, availableAppointment.toString());
+            System.out.printf("\n(%d) %s\n", i, availableAppointment.toString());
             i++;
         }
         return i;
