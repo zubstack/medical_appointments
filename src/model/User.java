@@ -19,8 +19,14 @@ public abstract class User {
         this.phoneNumber = phoneNumber;
     }
 
-    public ArrayList<User> getUsers() {
-        return users;
+    public static ArrayList<Doctor> getDoctors() {
+        ArrayList<Doctor> doctors = new ArrayList<>();
+        for (User user : users) {
+            if(user.getClass().getSimpleName().equals("Doctor")){
+                doctors.add((Doctor) user);
+            }
+        }
+        return doctors;
     }
 
     static public void registerNewUser(Doctor user, String username, String password) {

@@ -14,12 +14,13 @@ public class UIDoctorMenu {
 
     private final Scanner scan;
 
-    public UIDoctorMenu(Scanner scan){
+    public UIDoctorMenu(Scanner scan) {
         this.scan = scan;
     }
+
     public void showMenu(Doctor doctor) {
         int response = 0;
-        String[] options = new String[]{"Create an appointment", "Show appointment", "Log out"};
+        String[] options = new String[]{"Create an appointment", "Show my available appointments", "Show my pending appointments", "Cancel an appointment", "Log out"};
 
         System.out.println("\n**WELCOME, " + doctor.getName() + "**");
         do {
@@ -29,19 +30,20 @@ public class UIDoctorMenu {
 
                 switch (response) {
                     case 1:
-//                        String month = getMonth(); // getTime()
-//                        System.out.println("Your month: " + month);
-                        Doctor.AvailableAppointment appointment = new model.Doctor.AvailableAppointment(new Date(), "4pm");
-                        doctor.addNewAppointment(appointment);
-                        System.out.println("**NEW APPOINTMENT SAVED**");
+                        showCreateAppointmentMenu(doctor);
                         break;
                     case 2:
-                        doctor.showAvailableAppointments();
+                        showAvailableAppointments(doctor);
                         break;
                     case 3:
+                        System.out.println("**Show pending appointments**");
+                        break;
+                    case 4:
+                        System.out.println("**Cancel appointment**");
+                        break;
+                    case 5:
                         Auth.logout();
-                        System.out.println("\n**LOGGING OUT**");
-                        System.out.println();
+                        System.out.println("**LOGGING OUT**");
                         break;
                     default:
                         System.out.println("[ERROR]: Invalid option.");
@@ -53,7 +55,7 @@ public class UIDoctorMenu {
         } while (response != options.length);
     }
 
-    public void  showRegistrationMenu (String name, String email, String address, String phoneNumber) {
+    public void showRegistrationMenu(String name, String email, String address, String phoneNumber) {
         String speciality;
         String username;
         String password;
@@ -70,6 +72,30 @@ public class UIDoctorMenu {
         User.registerNewUser(doctor, username, password);
 
         System.out.println("\n**OPERATION SUCCEED: New " + doctor.getClass().getSimpleName() + " has been registered.**");
-        System.out.println();
+    }
+
+    public void showCreateAppointmentMenu(Doctor doctor) {
+        Date date = getDate();
+        String time = getTime();
+        // Here we should ask for confirmation about the data.
+
+        Doctor.AvailableAppointment appointment = new model.Doctor.AvailableAppointment(date, time, doctor);
+        doctor.addNewAppointment(appointment);
+        System.out.println("**New appointment created **");
+    }
+
+    public void showAvailableAppointments(Doctor doctor) {
+        doctor.showAvailableAppointments();
+    }
+
+    public Date getDate() {
+        // Prompt user for date
+        return new Date();
+
+    }
+
+    public String getTime() {
+        // Prompt user for time
+        return "4pm";
     }
 }
