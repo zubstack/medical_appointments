@@ -1,19 +1,31 @@
 package ui;
 
 public class UIMessage {
-    void error (String message){
+    public void error (String message){
         System.out.println("[ERROR]: " + message);
     }
 
-    void info (String message){
+    public void info (String message){
         System.out.println("\n** " + message + " **");
     }
 
-    void prompt (String message){
-        System.out.println("\n>> " + message);
+    public void prompt (String message){
+        System.out.println("\n:: " + message);
     }
 
-    void option (){
+    public void option (){
         System.out.print("\n\nOPTION: ");
+    }
+
+    public void numberedOption(int num, String text){
+        System.out.printf("\n(%d) %s", num, text);
+    }
+
+    public void listItem(String text){
+        System.out.println("\n" + text);
+    }
+
+    public void field(String text){
+        System.out.print("\n- " + text);
     }
 }

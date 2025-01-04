@@ -1,14 +1,17 @@
 package model;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+
+import static ui.UIMenu.message;
 
 public class Patient extends User {
     private String birthday;
     private double weight;
     private double height;
     private String blood;
-    private ArrayList<BookedAppointment> bookedAppointments = new ArrayList<>();
+    private final ArrayList<BookedAppointment> bookedAppointments = new ArrayList<>();
 
     public Patient(String name, String email, String address, String phoneNumber, String birthday, double weight, double height, String blood) {
         super(name, email, address, phoneNumber);
@@ -24,17 +27,17 @@ public class Patient extends User {
         String time;
         Doctor doctor;
         Patient patient;
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yy");
 
         @Override
         public String toString() {
-            return "BookedAppointment{" +
-//                    "ID='" + ID + '\'' +
-                    "Date: " + date +
-                    ", Time: '" + time + '\'' +
+            return '[' +
+                    "Date: " + getDate(date) +
+                    ", Time: '" + getTime() + '\'' +
                     ", Doctor: " + doctor.getName() +
                     ", Speciality: " + doctor.getSpeciality() +
-//                    ", patient=" + patient +
-                    '}';
+                    ", Patient: " + patient.getName() +
+                    ']';
         }
 
         public BookedAppointment(Doctor.AvailableAppointment appointment, Doctor doctor, Patient patient) {
@@ -45,6 +48,13 @@ public class Patient extends User {
             this.patient = patient;
         }
 
+        public String getDate(Date date) {
+            return format.format(date);
+        }
+
+        public String getTime() {
+            return time;
+        }
     }
 
     public void bookAppointment(Patient.BookedAppointment bookedAppointment) {
@@ -53,8 +63,12 @@ public class Patient extends User {
 
 
     public void showBookedAppointments() {
-        for (BookedAppointment bookedAppointment : bookedAppointments) {
-            System.out.println("\n" + bookedAppointment);
+        if (!bookedAppointments.isEmpty()) {
+            for (BookedAppointment bookedAppointment : bookedAppointments) {
+                message.listItem(bookedAppointment.toString());
+            }
+        } else {
+            message.info("EMPTY");
         }
     }
 

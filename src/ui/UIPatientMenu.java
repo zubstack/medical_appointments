@@ -62,20 +62,20 @@ public class UIPatientMenu {
         String username;
         String password;
 
-        System.out.print("Birthday: ");
+        message.field("Birthday: ");
         birthday = scan.nextLine();
-        System.out.print("Blood: ");
+        message.field("Blood: ");
         blood = scan.nextLine();
-        System.out.print("Weight: ");
+        message.field("Weight: ");
         weight = scan.nextDouble();
-        System.out.print("Height: ");
+        message.field("Height: ");
         height = scan.nextDouble();
         scan.nextLine();
 
         message.prompt("Register your credentials");
-        System.out.print("Username: ");
+        message.field("Username: ");
         username = scan.nextLine().trim();
-        System.out.print("Password: ");
+        message.field("Password: ");
         password = scan.nextLine().trim();
 
         Patient patient = new Patient(name, email, address, phoneNumber, birthday, weight, height, blood);
@@ -104,7 +104,7 @@ public class UIPatientMenu {
         do {
             message.prompt("Please select one appointment to be booked: ");
             max = showAllAvailableAppointmentsMenu();
-            System.out.print("\nYour option: ");
+           message.option();
             selectedIndex = scan.nextInt();
         } while (selectedIndex < 0 || selectedIndex > max);
         if(selectedIndex == max){
@@ -144,7 +144,7 @@ public class UIPatientMenu {
             i = availableDoctor.showAvailableAppointmentsInRow(i);
         }
         // Exit option:
-        System.out.printf("\n(%d) %s\n", i, "Exit");
+        message.numberedOption( i, "Exit");
         return i;
     }
 

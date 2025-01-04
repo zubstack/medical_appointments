@@ -60,12 +60,12 @@ public class UIDoctorMenu {
         String username;
         String password;
 
-        System.out.print("Speciality: ");
+        message.field("Speciality: ");
         speciality = scan.nextLine();
         message.prompt("Register your credentials: ");
-        System.out.print("Username: ");
+        message.field("Username: ");
         username = scan.nextLine().trim();
-        System.out.print("Password: ");
+        message.field("Password: ");
         password = scan.nextLine().trim();
 
         Doctor doctor = new Doctor(name, email, address, phoneNumber, speciality);

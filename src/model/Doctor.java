@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
 
+import static ui.UIMenu.message;
+
 public class Doctor extends User {
     private String speciality;
     ArrayList<AvailableAppointment> availableAppointments = new ArrayList<>();
@@ -51,8 +53,8 @@ public class Doctor extends User {
 
         @Override
         public String toString() {
-            return "Date: " + getDate(date) +
-                    ", Time: '" + time + '\'' + ", Doctor: " + doctor.getName() + ", Speciality: " + doctor.getSpeciality();
+            return "[Date: " + getDate(date) +
+                    ", Time: '" + time + '\'' + ", Doctor: " + doctor.getName() + ", Speciality: " + doctor.getSpeciality() + ']';
         }
     }
 
@@ -73,8 +75,12 @@ public class Doctor extends User {
     }
 
     public void showAvailableAppointments() {
-        for (AvailableAppointment availableAppointment : availableAppointments) {
-            System.out.println("- " + availableAppointment.toString());
+        if (!availableAppointments.isEmpty()) {
+            for (AvailableAppointment availableAppointment : availableAppointments) {
+                message.listItem(availableAppointment.toString());
+            }
+        } else {
+            message.info("EMPTY");
         }
     }
 

@@ -11,7 +11,7 @@ public class UIMenu {
             "July", "August", "September", "October", "November", "December"
     };
     final private Scanner scan;
-    static UIMessage message;
+    public static UIMessage message;
 
     private final UIDoctorMenu uiDoctorMenu;
     private final UIPatientMenu uiPatientMenu;
@@ -118,13 +118,13 @@ public class UIMenu {
         String address;
         String phoneNumber;
 
-        System.out.print("Name: ");
+        message.field("Name: ");
         name = scan.nextLine();
-        System.out.print("Email: ");
+        message.field("Email: ");
         email = scan.nextLine();
-        System.out.print("Address: ");
+        message.field("Address: ");
         address = scan.nextLine();
-        System.out.print("Phone Number: ");
+        message.field("Phone Number: ");
         phoneNumber = scan.nextLine();
 
         switch (response) {
@@ -146,9 +146,9 @@ public class UIMenu {
         String username;
         String password;
 
-        System.out.print("Username: ");
+        message.field("Username: ");
         username = scan.nextLine().trim();
-        System.out.print("Password: ");
+        message.field("Password: ");
         password = scan.nextLine().trim();
 
         return Auth.login(username, password);
@@ -157,7 +157,7 @@ public class UIMenu {
     public static void showOptions(String[] options) {
         message.prompt("Please, select an option:");
         for (int i = 0; i < options.length; i++) {
-            System.out.printf("\n(%d). %s", i + 1, options[i]);
+            message.numberedOption( i + 1, options[i]);
         }
         message.option();
     }
@@ -165,7 +165,7 @@ public class UIMenu {
     public static void showOptions(String instruction, String[] options) {
         message.prompt(instruction + ": ");
         for (int i = 0; i < options.length; i++) {
-            System.out.printf("\n(%d). %s", i + 1, options[i]);
+            message.numberedOption( i + 1, options[i]);
         }
         message.option();
     }
@@ -175,7 +175,7 @@ public class UIMenu {
         do {
             message.prompt("Select a month from " + MONTHS[min] + " to " + MONTHS[max]);
             for (int i = min; i < max + 1; i++) {
-                System.out.printf("(%d).%s\n", i + 1, MONTHS[i]);
+                message.numberedOption( i + 1, MONTHS[i]);
             }
             message.option();
             response = scan.nextInt();

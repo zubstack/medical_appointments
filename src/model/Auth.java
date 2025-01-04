@@ -2,6 +2,8 @@ package model;
 
 import java.util.ArrayList;
 
+import static ui.UIMenu.message;
+
 
 public class Auth {
     final private String username;
@@ -23,7 +25,7 @@ public class Auth {
 
     static public void showAuths() {
         for (Auth auth : auths) {
-            System.out.println("Auth: " + auth.username);
+            message.listItem("[Auth]: " + auth.username);
         }
     }
 
@@ -60,7 +62,7 @@ public class Auth {
             }
 
         } catch (Exception e) {
-            System.out.println("[ERROR]: Invalid username or password");
+            message.error("Invalid username or password");
         }
 
         return false;

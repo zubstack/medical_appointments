@@ -54,18 +54,17 @@ public class UINurseMenu {
         String username;
         String password;
 
-        System.out.print("Speciality: ");
+        message.field("Speciality: ");
         speciality = scan.nextLine();
         message.prompt("Register your credentials");
-        System.out.print("Username: ");
+        message.field("Username: ");
         username = scan.nextLine().trim();
-        System.out.print("Password: ");
+        message.field("Password: ");
         password = scan.nextLine().trim();
 
         Nurse nurse = new Nurse(name, email, address, phoneNumber, speciality);
         User.registerNewUser(nurse, username, password);
 
         message.info("New " + nurse.getClass().getSimpleName() + " has been registered.");
-        System.out.println();
     }
 }

@@ -3,6 +3,8 @@ package model;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import static ui.UIMenu.message;
+
 public abstract class User {
     final private String ID = UUID.randomUUID().toString();
     private String name;
@@ -49,7 +51,7 @@ public abstract class User {
 
     static public void showUsers() {
         for (User user : users) {
-            System.out.println(user.toString());
+            message.listItem(user.toString());
         }
     }
 
