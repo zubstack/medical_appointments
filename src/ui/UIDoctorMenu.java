@@ -8,8 +8,7 @@ import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import static ui.UIMenu.message;
-import static ui.UIMenu.showOptions;
+import static ui.UIMenu.*;
 
 public class UIDoctorMenu {
 
@@ -76,27 +75,61 @@ public class UIDoctorMenu {
     }
 
     public void showCreateAppointmentMenu(Doctor doctor) {
-        Date date = getDate();
-        String time = getTime();
-        // Here we should ask for confirmation about the data.
+        String date;
+        String time;
+        boolean isConfirmed = false;
+        int response;
+        Doctor.AvailableAppointment appointment;
 
-        Doctor.AvailableAppointment appointment = new model.Doctor.AvailableAppointment(date, time, doctor);
-        doctor.addNewAppointment(appointment);
-        message.info("New appointment created ");
+        do {
+            date = getDateForm();
+            time = getTimeForm();
+            appointment = new model.Doctor.AvailableAppointment(date, time, doctor);
+
+            message.info("New appointment: " + appointment);
+            message.prompt("Confirm appointment:\n(1). YES\n(2). NO\n(3). EXIT");
+            message.option();
+            response = scan.nextInt();
+
+            switch (response) {
+                case 1:
+                    isConfirmed = true;
+                    doctor.addNewAppointment(appointment);
+                    message.info("New appointment created.");
+                    break;
+                case 3:
+                    isConfirmed = true;
+                    break;
+            }
+
+        } while (!isConfirmed);
     }
 
     public void showAvailableAppointments(Doctor doctor) {
+        message.info("Available appointments");
         doctor.showAvailableAppointments();
     }
 
-    public Date getDate() {
-        // Prompt user for date
-        return new Date();
+    public String getDateForm() {
+        int day, month, year;
+
+        day = getDay(scan, 1, 27);
+        month = getMonth(scan, 0, 3);
+        year = getYear(scan, 2025, 2026);
+
+        return day + "/" + month + "/" + year + "/";
 
     }
 
-    public String getTime() {
-        // Prompt user for time
-        return "4pm";
+    public String getTimeForm() {
+        int hour, minutes;
+
+        message.prompt("Insert time:");
+        message.field("Hours: ");
+        hour = scan.nextInt();
+        message.field("Minutes: ");
+        minutes = scan.nextInt();
+
+        return hour + "h" + minutes;
     }
 }

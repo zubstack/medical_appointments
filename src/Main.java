@@ -1,3 +1,4 @@
+import model.Auth;
 import model.Nurse;
 import ui.UIMenu;
 import model.Doctor;
@@ -33,8 +34,8 @@ public class Main {
         // Auth.login("gab", "gab");
 
         // Create initial available appointments:
-        Doctor.AvailableAppointment appointment1 = new Doctor.AvailableAppointment(new Date(), "2pm", doctor2);
-        Doctor.AvailableAppointment appointment2 = new Doctor.AvailableAppointment(new Date(), "4pm", doctor3);
+        Doctor.AvailableAppointment appointment1 = new Doctor.AvailableAppointment("03/03/2025", "2pm", doctor2);
+        Doctor.AvailableAppointment appointment2 = new Doctor.AvailableAppointment("03/03/2025", "4pm", doctor3);
         doctor2.addNewAppointment(appointment1);
         doctor3.addNewAppointment(appointment2);
 

@@ -170,38 +170,32 @@ public class UIMenu {
         message.option();
     }
 
-    public static int getMonth(Scanner scan) {
+    public static int getMonth(Scanner scan, int min, int max) {
         int response;
-        final int min = 0;
-        final int max = 3;
         do {
-            message.prompt("Select a month from " + MONTHS[min] + " to" + MONTHS[max]);
-            for (int i = min; i < max; i++) {
+            message.prompt("Select a month from " + MONTHS[min] + " to " + MONTHS[max]);
+            for (int i = min; i < max + 1; i++) {
                 System.out.printf("(%d).%s\n", i + 1, MONTHS[i]);
             }
             message.option();
             response = scan.nextInt();
-        } while (response < min + 1 || response > max);
-        return (response - 1);
+        } while (response < min + 1 || response > max + 1);
+        return (response);
     }
 
-    public static int getDay(Scanner scan) {
+    public static int getDay(Scanner scan, int min, int max) {
         int response;
-        final int min = 1;
-        final int max = 27;
         do {
-            message.prompt("Insert a day from " + min + " to" + max + ": ");
+            message.prompt("Insert a day (from " + min + " to " + max + "): ");
             response = scan.nextInt();
         } while (response < min || response > max);
         return (response);
     }
 
-    public static int getYear(Scanner scan) {
+    public static int getYear(Scanner scan, int min, int max) {
         int response;
-        final int min = 2024;
-        final int max = 2025;
         do {
-            message.prompt("Insert a year from " + min + " to" + max + ": ");
+            message.prompt("Insert a year from " + min + " to " + max + ": ");
             response = scan.nextInt();
         } while (response < min || response > max);
         return (response);
