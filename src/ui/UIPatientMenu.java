@@ -85,8 +85,8 @@ public class UIPatientMenu {
     }
 
     void showBookAvailableAppointmentMenu(Patient patient) {
-        Object selectedIndex = selectAnAppointment();
-        if(selectedIndex != null){
+        Object selectedIndex = showAppointmentsListMenu();
+        if (selectedIndex != null) {
             bookSelectedAppointment((int) selectedIndex, patient);
             message.info("APPOINTMENT BOOKED");
         }
@@ -98,18 +98,18 @@ public class UIPatientMenu {
         patient.showBookedAppointments();
     }
 
-    public Object selectAnAppointment() {
+    public Object showAppointmentsListMenu() {
         int selectedIndex;
         int max;
         do {
             message.prompt("Please select one appointment to be booked: ");
             max = showAllAvailableAppointmentsMenu();
-           message.option();
+            message.option();
             selectedIndex = scan.nextInt();
         } while (selectedIndex < 0 || selectedIndex > max);
-        if(selectedIndex == max){
+        if (selectedIndex == max) {
             return null;
-        }else{
+        } else {
             return selectedIndex;
         }
     }
@@ -119,10 +119,10 @@ public class UIPatientMenu {
         for (Doctor availableDoctor : availableDoctors) {
             for (Doctor.AvailableAppointment availableAppointment : availableDoctor.getAvailableAppointments()) {
                 if (i == selectedIndex) {
-                    Patient.BookedAppointment newBookedAppointment = new Patient.BookedAppointment(availableAppointment, availableDoctor, patient);
+                    Patient.BookedAppointment newBookedAppointment = new Patient.BookedAppointment(availableAppointment, patient);
                     patient.bookAppointment(newBookedAppointment);
                     availableDoctor.removeAvailableAAppointment(availableAppointment);
-                    if(!availableDoctor.hasAvailableAppointments()){
+                    if (!availableDoctor.hasAvailableAppointments()) {
                         availableDoctors.remove(availableDoctor);
                     }
                     return;
@@ -144,7 +144,7 @@ public class UIPatientMenu {
             i = availableDoctor.showAvailableAppointmentsInRow(i);
         }
         // Exit option:
-        message.numberedOption( i, "Exit");
+        message.numberedOption(i, "Exit");
         return i;
     }
 
