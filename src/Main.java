@@ -34,10 +34,18 @@ public class Main {
         // Auth.login("gab", "gab");
 
         // Create initial available appointments:
-        Doctor.AvailableAppointment appointment1 = new Doctor.AvailableAppointment("03/03/2025", "2pm", doctor2);
-        Doctor.AvailableAppointment appointment2 = new Doctor.AvailableAppointment("03/03/2025", "4pm", doctor3);
-        doctor2.addNewAppointment(appointment1);
-        doctor3.addNewAppointment(appointment2);
+        Doctor.AvailableAppointment appointment1 = new Doctor.AvailableAppointment("03/03/2025", "1pm", doctor1);
+        Doctor.AvailableAppointment appointment2 = new Doctor.AvailableAppointment("03/03/2025", "2pm", doctor2);
+        Doctor.AvailableAppointment appointment3 = new Doctor.AvailableAppointment("03/03/2025", "2pm", doctor3);
+        Doctor.AvailableAppointment appointment4 = new Doctor.AvailableAppointment("03/03/2025", "4pm", doctor1);
+        Doctor.AvailableAppointment appointment5 = new Doctor.AvailableAppointment("03/03/2025", "5pm", doctor2);
+        Doctor.AvailableAppointment appointment6 = new Doctor.AvailableAppointment("03/03/2025", "6pm", doctor3);
+        doctor1.addNewAppointment(appointment1);
+        doctor2.addNewAppointment(appointment2);
+        doctor3.addNewAppointment(appointment3);
+        doctor1.addNewAppointment(appointment4);
+        doctor2.addNewAppointment(appointment5);
+        doctor3.addNewAppointment(appointment6);
 
         // Show UI Menu
         uiMenu.showMenu();

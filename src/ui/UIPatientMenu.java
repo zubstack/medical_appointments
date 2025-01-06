@@ -5,9 +5,7 @@ import model.Doctor;
 import model.Patient;
 import model.User;
 
-import java.util.ArrayList;
-import java.util.InputMismatchException;
-import java.util.Scanner;
+import java.util.*;
 
 import static ui.UIMenu.message;
 
@@ -85,12 +83,54 @@ public class UIPatientMenu {
     }
 
     void showBookAvailableAppointmentMenu(Patient patient) {
-        Object selectedIndex = showAppointmentsListMenu();
-        if (selectedIndex != null) {
-            bookSelectedAppointment((int) selectedIndex, patient);
-            message.info("APPOINTMENT BOOKED");
-        }
+        boolean isConfirmed = false;
+        int response;
+        int selectedIndex;
+        int max;
+        int k;
+        Map<Integer, Doctor.AvailableAppointment> appointmentsTree = new TreeMap<>();
 
+        updateAvailableAppointments();
+
+        do {
+            do {
+                k = 0;
+                message.prompt("Please select one appointment to be booked: ");
+
+                for (Doctor availableDoctor : availableDoctors) {
+                    ArrayList<Doctor.AvailableAppointment> availableAppointments = availableDoctor.getAvailableAppointments();
+                    for (Doctor.AvailableAppointment availableAppointment : availableAppointments) {
+                        appointmentsTree.put(k, availableAppointment);
+                        message.numberedOption(k, availableAppointment.toString());
+                        k++;
+                    }
+                }
+                // Last option:
+                message.numberedOption(k, "Exit");
+                max = k;
+                message.option();
+                selectedIndex = scan.nextInt();
+            } while (selectedIndex < 0 || selectedIndex > max);
+
+            if (selectedIndex == max) {
+                return;
+            }
+
+            Doctor.AvailableAppointment selectedAppointment = appointmentsTree.get(selectedIndex);
+            Doctor selectedDoctor = selectedAppointment.getDoctor();
+            message.info("Your selected appointment: ");
+            message.info(selectedAppointment.toString());
+            message.showConfirmationOptions();
+            response = scan.nextInt();
+
+            if (response == 1) {
+                Patient.BookedAppointment newBookedAppointment = new Patient.BookedAppointment(selectedAppointment, patient);
+                patient.bookAppointment(newBookedAppointment);
+                selectedDoctor.removeAvailableAAppointment(selectedAppointment);
+                message.info("APPOINTMENT BOOKED");
+                isConfirmed = true;
+            }
+        } while (!isConfirmed);
     }
 
     void showBookedAppointments(Patient patient) {
@@ -98,54 +138,13 @@ public class UIPatientMenu {
         patient.showBookedAppointments();
     }
 
-    public Object showAppointmentsListMenu() {
-        int selectedIndex;
-        int max;
-        do {
-            message.prompt("Please select one appointment to be booked: ");
-            max = showAllAvailableAppointmentsMenu();
-            message.option();
-            selectedIndex = scan.nextInt();
-        } while (selectedIndex < 0 || selectedIndex > max);
-        if (selectedIndex == max) {
-            return null;
-        } else {
-            return selectedIndex;
-        }
-    }
-
-    void bookSelectedAppointment(int selectedIndex, Patient patient) {
-        int i = 0;
-        for (Doctor availableDoctor : availableDoctors) {
-            for (Doctor.AvailableAppointment availableAppointment : availableDoctor.getAvailableAppointments()) {
-                if (i == selectedIndex) {
-                    Patient.BookedAppointment newBookedAppointment = new Patient.BookedAppointment(availableAppointment, patient);
-                    patient.bookAppointment(newBookedAppointment);
-                    availableDoctor.removeAvailableAAppointment(availableAppointment);
-                    if (!availableDoctor.hasAvailableAppointments()) {
-                        availableDoctors.remove(availableDoctor);
-                    }
-                    return;
-                }
-                i++;
-            }
-        }
-    }
-
-    int showAllAvailableAppointmentsMenu() {
-        int i = 0;
+    void updateAvailableAppointments() {
         ArrayList<Doctor> doctors = User.getDoctors();
         for (Doctor doctor : doctors) {
             if (doctor.hasAvailableAppointments() && !availableDoctors.contains(doctor)) {
                 availableDoctors.add(doctor);
             }
         }
-        for (Doctor availableDoctor : availableDoctors) {
-            i = availableDoctor.showAvailableAppointmentsInRow(i);
-        }
-        // Exit option:
-        message.numberedOption(i, "Exit");
-        return i;
     }
-
 }
+

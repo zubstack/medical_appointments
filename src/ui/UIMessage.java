@@ -28,4 +28,11 @@ public class UIMessage {
     public void field(String text){
         System.out.print("\n- " + text);
     }
+
+    public void showConfirmationOptions(){
+        prompt("Confirm: ");
+        System.out.println("\n(1). YES\n(2). NO");
+        option();
+    }
 }
+
