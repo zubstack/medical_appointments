@@ -51,6 +51,10 @@ public class Doctor extends User {
             return time;
         }
 
+        public Doctor getDoctor(){
+            return doctor;
+        }
+
         @Override
         public String toString() {
             return "[Date: " + getDate(date) +

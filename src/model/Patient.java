@@ -40,11 +40,11 @@ public class Patient extends User {
                     ']';
         }
 
-        public BookedAppointment(Doctor.AvailableAppointment appointment, Doctor doctor, Patient patient) {
+        public BookedAppointment(Doctor.AvailableAppointment appointment, Patient patient) {
             this.ID = appointment.getID();
             this.date = appointment.getDate();
             this.time = appointment.getTime();
-            this.doctor = doctor;
+            this.doctor = appointment.getDoctor();
             this.patient = patient;
         }
 
