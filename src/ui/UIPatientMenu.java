@@ -4,17 +4,27 @@ import model.Auth;
 import model.Doctor;
 import model.Patient;
 import model.User;
+import repository.AuthRepository;
+import repository.DoctorRepository;
+import repository.UserRepository;
 
 import java.util.*;
 
 import static ui.UIMenu.message;
 
 public class UIPatientMenu {
+    private UserRepository userRepository;
+    private DoctorRepository doctorRepository;
+    private AuthRepository authRepository;
+
     private final Scanner scan;
     private final ArrayList<Doctor> availableDoctors = new ArrayList<>();
 
-    public UIPatientMenu(Scanner scan) {
+    public UIPatientMenu(Scanner scan, UserRepository userRepository, DoctorRepository doctorRepository, AuthRepository authRepository) {
         this.scan = scan;
+        this.userRepository = userRepository;
+        this.doctorRepository = doctorRepository;
+        this.authRepository = authRepository;
     }
 
     public void showMenu(Patient patient) {
@@ -77,7 +87,9 @@ public class UIPatientMenu {
         password = scan.nextLine().trim();
 
         Patient patient = new Patient(name, email, address, phoneNumber, birthday, weight, height, blood);
-        User.registerNewUser(patient, username, password);
+        userRepository.save(patient);
+        Auth auth = new Auth(username, patient.getId(), password);
+        authRepository.save(auth);
 
         message.info("New " + patient.getClass().getSimpleName() + " has been registered.");
     }
@@ -139,7 +151,7 @@ public class UIPatientMenu {
     }
 
     void updateAvailableAppointments() {
-        ArrayList<Doctor> doctors = User.getDoctors();
+        List<Doctor> doctors = doctorRepository.findAll();
         for (Doctor doctor : doctors) {
             if (doctor.hasAvailableAppointments() && !availableDoctors.contains(doctor)) {
                 availableDoctors.add(doctor);

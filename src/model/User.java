@@ -1,9 +1,7 @@
 package model;
 
-import java.util.ArrayList;
 import java.util.UUID;
 
-import static ui.UIMenu.message;
 
 public abstract class User {
     final private String ID = UUID.randomUUID().toString();
@@ -12,50 +10,11 @@ public abstract class User {
     private String address;
     private String phoneNumber;
 
-    static ArrayList<User> users = new ArrayList<>();
-
     public User(String name, String email, String address, String phoneNumber) {
         this.name = name;
         this.email = email;
         this.address = address;
         this.phoneNumber = phoneNumber;
-    }
-
-    public static ArrayList<Doctor> getDoctors() {
-        ArrayList<Doctor> doctors = new ArrayList<>();
-        for (User user : users) {
-            if(user.getClass().getSimpleName().equals("Doctor")){
-                doctors.add((Doctor) user);
-            }
-        }
-        return doctors;
-    }
-
-    static public void registerNewUser(Doctor user, String username, String password) {
-        users.add(user);
-        Auth auth = new Auth(username, user.getId(), password);
-        Auth.registerNewAuth(auth);
-    }
-
-    static public void registerNewUser(Patient user, String username, String password) {
-        users.add(user);
-        Auth auth = new Auth(username, user.getId(), password);
-        Auth.registerNewAuth(auth);
-    }
-
-    static public void showUsers() {
-        for (User user : users) {
-            message.listItem(user.toString());
-        }
-    }
-
-    static public User findUserById(String userId) {
-        for (User user : users) {
-            if (user.getId().equals(userId)) {
-                return user;
-            }
-        }
-        return null;
     }
 
     public String getId() {

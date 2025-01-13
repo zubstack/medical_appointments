@@ -1,16 +1,20 @@
 package model;
 
+import repository.AuthRepository;
+import repository.UserRepository;
+
 import java.util.ArrayList;
+import java.util.UUID;
 
 import static ui.UIMenu.message;
 
 
 public class Auth {
+    final private String ID = UUID.randomUUID().toString();
     final private String username;
     final private String userId;
     final private String password;
 
-    static ArrayList<Auth> auths = new ArrayList<>();
     static private User currentUser;
 
     public Auth(String username, String userId, String password) {
@@ -19,30 +23,15 @@ public class Auth {
         this.userId = userId;
     }
 
-    static public void registerNewAuth(Auth auth) {
-        auths.add(auth);
-    }
-
-    static public void showAuths() {
-        for (Auth auth : auths) {
-            message.listItem("[Auth]: " + auth.username);
-        }
-    }
-
-    static private Auth findAuthByUsername(String username) {
-        for (Auth auth : auths) {
-            if (auth.getUsername().equals(username)) {
-                return auth;
-            }
-        }
-        return null;
+    public String getId() {
+        return ID;
     }
 
     public String getPassword() {
         return password;
     }
 
-    private String getUsername() {
+    public String getUsername() {
         return this.username;
     }
 
@@ -50,10 +39,10 @@ public class Auth {
         return userId;
     }
 
-    static public boolean login(String username, String password) {
+    static public boolean login(String username, String password, UserRepository userRepository, AuthRepository authRepository) {
         try {
-            Auth auth = Auth.findAuthByUsername(username);
-            User user = User.findUserById(auth.getUserId());
+            Auth auth = authRepository.findByUsername(username);
+            User user = userRepository.findById(auth.getUserId());
             if (auth.getPassword().equals(password)) {
                 currentUser = user;
                 return true;

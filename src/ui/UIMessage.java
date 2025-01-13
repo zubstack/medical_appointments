@@ -21,8 +21,8 @@ public class UIMessage {
         System.out.printf("\n(%d) %s", num, text);
     }
 
-    public void listItem(String text){
-        System.out.println("\n" + text);
+    public void listItem(Object item){
+        System.out.println("\n" + item.toString());
     }
 
     public void field(String text){

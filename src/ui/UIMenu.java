@@ -1,15 +1,26 @@
 package ui;
 
 import model.*;
+import repository.AuthRepository;
+import repository.DoctorRepository;
+import repository.PatientRepository;
+import repository.UserRepository;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class UIMenu {
+
     static final String[] MONTHS = {
             "January", "February", "March", "April", "May", "June",
             "July", "August", "September", "October", "November", "December"
     };
+
+    private UserRepository userRepository;
+    private DoctorRepository doctorRepository;
+    private PatientRepository patientRepository;
+    private AuthRepository authRepository;
+
     final private Scanner scan;
     public static UIMessage message;
 
@@ -17,12 +28,17 @@ public class UIMenu {
     private final UIPatientMenu uiPatientMenu;
     private final UIDevMenu uiDevMenu;
 
-    public UIMenu(Scanner scan) {
+    public UIMenu(Scanner scan, UserRepository userRepository, DoctorRepository doctorRepository, PatientRepository patientRepository, AuthRepository authRepository) {
         this.scan = scan;
+        this.userRepository = userRepository;
+        this.doctorRepository = doctorRepository;
+        this.patientRepository = patientRepository;
+        this.authRepository = authRepository;
+
         message = new UIMessage();
-        this.uiDoctorMenu = new UIDoctorMenu(scan);
-        this.uiPatientMenu = new UIPatientMenu(scan);
-        this.uiDevMenu = new UIDevMenu(scan);
+        this.uiDoctorMenu = new UIDoctorMenu(scan, userRepository, authRepository);
+        this.uiPatientMenu = new UIPatientMenu(scan, userRepository, doctorRepository, authRepository);
+        this.uiDevMenu = new UIDevMenu(scan, userRepository);
     }
 
 
@@ -143,7 +159,7 @@ public class UIMenu {
         message.field("Password: ");
         password = scan.nextLine().trim();
 
-        return Auth.login(username, password);
+        return Auth.login(username, password, userRepository, authRepository);
     }
 
     public static void showOptions(String[] options) {

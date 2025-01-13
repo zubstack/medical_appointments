@@ -3,6 +3,8 @@ package ui;
 import model.Auth;
 import model.Doctor;
 import model.User;
+import repository.AuthRepository;
+import repository.UserRepository;
 
 import java.util.Date;
 import java.util.InputMismatchException;
@@ -13,9 +15,13 @@ import static ui.UIMenu.*;
 public class UIDoctorMenu {
 
     private final Scanner scan;
+    private UserRepository userRepository;
+    private AuthRepository authRepository;
 
-    public UIDoctorMenu(Scanner scan) {
+    public UIDoctorMenu(Scanner scan, UserRepository userRepository, AuthRepository authRepository) {
         this.scan = scan;
+        this.userRepository=  userRepository;
+        this.authRepository=  authRepository;
     }
 
     public void showMenu(Doctor doctor) {
@@ -69,7 +75,9 @@ public class UIDoctorMenu {
         password = scan.nextLine().trim();
 
         Doctor doctor = new Doctor(name, email, address, phoneNumber, speciality);
-        User.registerNewUser(doctor, username, password);
+        userRepository.save(doctor);
+        Auth auth = new Auth(username, doctor.getId(), password);
+        authRepository.save(auth);
 
         message.info("New " + doctor.getClass().getSimpleName() + " has been registered.");
     }
