@@ -3,28 +3,29 @@ package ui;
 import model.Auth;
 import model.Doctor;
 import model.Patient;
-import model.User;
-import repository.AuthRepository;
-import repository.DoctorRepository;
-import repository.UserRepository;
+import repository.*;
 
 import java.util.*;
 
 import static ui.UIMenu.message;
 
 public class UIPatientMenu {
-    private UserRepository userRepository;
-    private DoctorRepository doctorRepository;
-    private AuthRepository authRepository;
+    private final UserRepository userRepository;
+    private final DoctorRepository doctorRepository;
+    private final AuthRepository authRepository;
+    private final AvailableAppointmentRepository availableAppointmentRepository;
+    private final BookedAppointmentRepository bookedAppointmentRepository;
 
     private final Scanner scan;
-    private final ArrayList<Doctor> availableDoctors = new ArrayList<>();
+    private final Set<Doctor> availableDoctors = new HashSet<>();
 
-    public UIPatientMenu(Scanner scan, UserRepository userRepository, DoctorRepository doctorRepository, AuthRepository authRepository) {
+    public UIPatientMenu(Scanner scan, UserRepository userRepository, DoctorRepository doctorRepository, AuthRepository authRepository, AvailableAppointmentRepository availableAppointmentRepository, BookedAppointmentRepository bookedAppointmentRepository) {
         this.scan = scan;
         this.userRepository = userRepository;
         this.doctorRepository = doctorRepository;
         this.authRepository = authRepository;
+        this.availableAppointmentRepository = availableAppointmentRepository;
+        this.bookedAppointmentRepository = bookedAppointmentRepository;
     }
 
     public void showMenu(Patient patient) {
@@ -72,8 +73,12 @@ public class UIPatientMenu {
 
         message.field("Birthday: ");
         birthday = scan.nextLine();
-        message.field("Blood: ");
-        blood = scan.nextLine();
+
+        do {
+            message.field("Blood (\"A+\", \"A-\", \"B+\", \"B-\", \"O+\", \"O-\", \"AB+\", \"AB-\"): ");
+            blood = scan.nextLine();
+        } while (!isValidBloodType(blood));
+
         message.field("Weight: ");
         weight = scan.nextDouble();
         message.field("Height: ");
@@ -95,50 +100,51 @@ public class UIPatientMenu {
     }
 
     void showBookAvailableAppointmentMenu(Patient patient) {
+        int CONFIRM = 1;
         boolean isConfirmed = false;
         int response;
         int selectedIndex;
-        int max;
         int k;
         Map<Integer, Doctor.AvailableAppointment> appointmentsTree = new TreeMap<>();
 
         updateAvailableAppointments();
 
         do {
-            do {
-                k = 0;
-                message.prompt("Please select one appointment to be booked: ");
+            k = 0;
+            message.prompt("Please select one appointment to be booked: ");
 
+            if (!availableDoctors.isEmpty()) {
                 for (Doctor availableDoctor : availableDoctors) {
-                    ArrayList<Doctor.AvailableAppointment> availableAppointments = availableDoctor.getAvailableAppointments();
-                    for (Doctor.AvailableAppointment availableAppointment : availableAppointments) {
-                        appointmentsTree.put(k, availableAppointment);
-                        message.numberedOption(k, availableAppointment.toString());
+                    ArrayList<Doctor.AvailableAppointment> availableAppointments = availableAppointmentRepository.findByDoctorId(availableDoctor.getId());
+                    for (Doctor.AvailableAppointment appointment : availableAppointments) {
+                        appointmentsTree.put(k, appointment);
+                        message.numberedOption(k, appointment.toString());
                         k++;
                     }
                 }
-                // Last option:
-                message.numberedOption(k, "Exit");
-                max = k;
-                message.option();
-                selectedIndex = scan.nextInt();
-            } while (selectedIndex < 0 || selectedIndex > max);
 
-            if (selectedIndex == max) {
+            } else {
+                message.info("No available appointments for the moment.");
+            }
+
+            // Last option:
+            message.numberedOption(k, "Exit");
+
+            selectedIndex = getValidAppointmentIndex(k);
+
+            if (selectedIndex == k) {
                 return;
             }
 
             Doctor.AvailableAppointment selectedAppointment = appointmentsTree.get(selectedIndex);
-            Doctor selectedDoctor = selectedAppointment.getDoctor();
             message.info("Your selected appointment: ");
             message.info(selectedAppointment.toString());
             message.showConfirmationOptions();
             response = scan.nextInt();
 
-            if (response == 1) {
+            if (response == CONFIRM) {
                 Patient.BookedAppointment newBookedAppointment = new Patient.BookedAppointment(selectedAppointment, patient);
-                patient.bookAppointment(newBookedAppointment);
-                selectedDoctor.removeAvailableAAppointment(selectedAppointment);
+                bookAnAppointment(newBookedAppointment, selectedAppointment);
                 message.info("APPOINTMENT BOOKED");
                 isConfirmed = true;
             }
@@ -147,16 +153,59 @@ public class UIPatientMenu {
 
     void showBookedAppointments(Patient patient) {
         message.info("Your booked appointments: ");
-        patient.showBookedAppointments();
+        showBookedAppointments(patient.getId());
     }
 
     void updateAvailableAppointments() {
         List<Doctor> doctors = doctorRepository.findAll();
         for (Doctor doctor : doctors) {
-            if (doctor.hasAvailableAppointments() && !availableDoctors.contains(doctor)) {
-                availableDoctors.add(doctor);
+            if (hasAvailableAppointments(doctor.getId())) {
+                availableDoctors.add(doctor); // Set automatically prevents duplicates
             }
         }
     }
+
+
+    public boolean hasAvailableAppointments(String doctorId) {
+        ArrayList<Doctor.AvailableAppointment> availableAppointments = availableAppointmentRepository.findByDoctorId(doctorId);
+        if (availableAppointments == null) {
+            return false;
+        }
+        return !availableAppointments.isEmpty();
+    }
+
+    public void showBookedAppointments(String patientId) {
+        ArrayList<Patient.BookedAppointment> patientBookedAppointments = bookedAppointmentRepository.findByPatientId(patientId);
+        if (patientBookedAppointments != null) {
+            if (!patientBookedAppointments.isEmpty()) {
+                patientBookedAppointments.forEach(message::listItem);
+            }
+        } else {
+            message.info("EMPTY");
+        }
+    }
+
+    private boolean isValidBloodType(String blood) {
+        return Arrays.asList("A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-").contains(blood);
+    }
+
+    private int getValidAppointmentIndex(int max) {
+        int selectedIndex;
+        do {
+            message.option();
+            selectedIndex = scan.nextInt();
+        } while (selectedIndex < 0 || selectedIndex > max);
+        return selectedIndex;
+    }
+
+    // Transaction: Book an appointment
+    void bookAnAppointment(Patient.BookedAppointment newBookedAppointment, Doctor.AvailableAppointment selectedAppointment) {
+        bookedAppointmentRepository.save(newBookedAppointment);
+        availableAppointmentRepository.remove(selectedAppointment);
+        if (!hasAvailableAppointments(selectedAppointment.getDoctor().getId())) {
+            availableDoctors.remove(selectedAppointment.getDoctor());
+        }
+    }
+
 }
 

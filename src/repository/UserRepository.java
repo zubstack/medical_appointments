@@ -15,7 +15,6 @@ public class UserRepository  implements Repository<User>{
 
     @Override
     public List<User> findAll() {
-        // Usa conn para hacer un query "SELECT" a la base de datos
         return users;
     }
 

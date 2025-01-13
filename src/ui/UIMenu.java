@@ -1,10 +1,7 @@
 package ui;
 
 import model.*;
-import repository.AuthRepository;
-import repository.DoctorRepository;
-import repository.PatientRepository;
-import repository.UserRepository;
+import repository.*;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -16,10 +13,8 @@ public class UIMenu {
             "July", "August", "September", "October", "November", "December"
     };
 
-    private UserRepository userRepository;
-    private DoctorRepository doctorRepository;
-    private PatientRepository patientRepository;
-    private AuthRepository authRepository;
+    private final UserRepository userRepository;
+    private final AuthRepository authRepository;
 
     final private Scanner scan;
     public static UIMessage message;
@@ -28,16 +23,14 @@ public class UIMenu {
     private final UIPatientMenu uiPatientMenu;
     private final UIDevMenu uiDevMenu;
 
-    public UIMenu(Scanner scan, UserRepository userRepository, DoctorRepository doctorRepository, PatientRepository patientRepository, AuthRepository authRepository) {
+    public UIMenu(Scanner scan, UserRepository userRepository, DoctorRepository doctorRepository, PatientRepository patientRepository, AuthRepository authRepository, AvailableAppointmentRepository availableAppointmentRepository, BookedAppointmentRepository bookedAppointmentRepository) {
         this.scan = scan;
         this.userRepository = userRepository;
-        this.doctorRepository = doctorRepository;
-        this.patientRepository = patientRepository;
         this.authRepository = authRepository;
 
         message = new UIMessage();
-        this.uiDoctorMenu = new UIDoctorMenu(scan, userRepository, authRepository);
-        this.uiPatientMenu = new UIPatientMenu(scan, userRepository, doctorRepository, authRepository);
+        this.uiDoctorMenu = new UIDoctorMenu(scan, userRepository, authRepository, availableAppointmentRepository);
+        this.uiPatientMenu = new UIPatientMenu(scan, userRepository, doctorRepository, authRepository, availableAppointmentRepository, bookedAppointmentRepository);
         this.uiDevMenu = new UIDevMenu(scan, userRepository);
     }
 
@@ -165,7 +158,7 @@ public class UIMenu {
     public static void showOptions(String[] options) {
         message.prompt("Please, select an option:");
         for (int i = 0; i < options.length; i++) {
-            message.numberedOption( i + 1, options[i]);
+            message.numberedOption(i + 1, options[i]);
         }
         message.option();
     }
@@ -173,7 +166,7 @@ public class UIMenu {
     public static void showOptions(String instruction, String[] options) {
         message.prompt(instruction + ": ");
         for (int i = 0; i < options.length; i++) {
-            message.numberedOption( i + 1, options[i]);
+            message.numberedOption(i + 1, options[i]);
         }
         message.option();
     }
@@ -183,7 +176,7 @@ public class UIMenu {
         do {
             message.prompt("Select a month from " + MONTHS[min] + " to " + MONTHS[max]);
             for (int i = min; i < max + 1; i++) {
-                message.numberedOption( i + 1, MONTHS[i]);
+                message.numberedOption(i + 1, MONTHS[i]);
             }
             message.option();
             response = scan.nextInt();

@@ -1,17 +1,10 @@
 package model;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-
-import static ui.UIMenu.message;
-
 public class Patient extends User {
     private String birthday;
     private double weight;
     private double height;
     private String blood;
-    private final ArrayList<BookedAppointment> bookedAppointments = new ArrayList<>();
 
     public Patient(String name, String email, String address, String phoneNumber, String birthday, double weight, double height, String blood) {
         super(name, email, address, phoneNumber);
@@ -21,54 +14,28 @@ public class Patient extends User {
         this.blood = blood;
     }
 
-    public static class BookedAppointment {
-        private String ID;
-        private Date date;
-        private String time;
-        private Doctor doctor;
-        private Patient patient;
-        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yy");
+    public static class BookedAppointment extends Doctor.AvailableAppointment {
+        private final String ID;
+        private final Patient patient;
 
         public BookedAppointment(Doctor.AvailableAppointment appointment, Patient patient) {
-            this.ID = appointment.getID();
-            this.date = appointment.getDate();
-            this.time = appointment.getTime();
-            this.doctor = appointment.getDoctor();
+            super(appointment.getDate(), appointment.getTime(), appointment.getDoctor());
             this.patient = patient;
+            this.ID = appointment.getID();
         }
 
-        public String getDate(Date date) {
-            return format.format(date);
-        }
-
-        public String getTime() {
-            return time;
+        public Patient getPatient() {
+            return patient;
         }
 
         @Override
         public String toString() {
-            return '[' +
-                    "Date: " + getDate(date) +
-                    ", Time: '" + getTime() + '\'' +
-                    ", Doctor: " + doctor.getName() +
-                    ", Speciality: " + doctor.getSpeciality() +
-                    ", Patient: " + patient.getName() +
-                    ']';
-        }
-    }
-
-    public void bookAppointment(Patient.BookedAppointment bookedAppointment) {
-        bookedAppointments.add(bookedAppointment);
-    }
-
-
-    public void showBookedAppointments() {
-        if (!bookedAppointments.isEmpty()) {
-            for (BookedAppointment bookedAppointment : bookedAppointments) {
-                message.listItem(bookedAppointment.toString());
-            }
-        } else {
-            message.info("EMPTY");
+            return "[BOOKED]" +
+                    "Date: " + super.getDate() +
+                    ", Time: '" + super.getTime() + '\'' +
+                    ", Doctor: " + super.getDoctor().getName() +
+                    ", Speciality: " + super.getDoctor().getSpeciality() +
+                    ", Patient: " + patient.getName();
         }
     }
 

@@ -9,7 +9,7 @@ import java.util.List;
 public class PatientRepository implements Repository<Patient>{
 
     Object conn;
-    private ArrayList<Patient> patients = new ArrayList<>();
+    private final ArrayList<Patient> patients = new ArrayList<>();
 
     public PatientRepository (Object conn){
         this.conn = conn;

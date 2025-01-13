@@ -22,7 +22,7 @@ public class UIMessage {
     }
 
     public void listItem(Object item){
-        System.out.println("\n" + item.toString());
+        System.out.println("\n<> " + item.toString());
     }
 
     public void field(String text){

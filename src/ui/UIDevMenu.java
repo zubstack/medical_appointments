@@ -1,8 +1,6 @@
 package ui;
 
-import model.Auth;
 import model.User;
-import repository.AuthRepository;
 import repository.UserRepository;
 
 import java.util.InputMismatchException;
@@ -14,7 +12,7 @@ import static ui.UIMenu.showOptions;
 
 public class UIDevMenu {
     private final Scanner scan;
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public UIDevMenu(Scanner scan, UserRepository userRepository) {
         this.scan = scan;

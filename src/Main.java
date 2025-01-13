@@ -1,8 +1,5 @@
 import model.Auth;
-import repository.AuthRepository;
-import repository.DoctorRepository;
-import repository.PatientRepository;
-import repository.UserRepository;
+import repository.*;
 import ui.UIMenu;
 import model.Doctor;
 import model.Patient;
@@ -16,9 +13,10 @@ public class Main {
         DoctorRepository doctorRepository = new DoctorRepository(new Object());
         PatientRepository patientRepository = new PatientRepository(new Object());
         AuthRepository authRepository = new AuthRepository(new Object());
+        AvailableAppointmentRepository availableAppointmentRepository = new AvailableAppointmentRepository(new Object());        BookedAppointmentRepository bookedAppointmentRepository = new BookedAppointmentRepository(new Object());
 
         Scanner scan = new Scanner(System.in);
-        UIMenu uiMenu = new UIMenu(scan, userRepository, doctorRepository, patientRepository, authRepository);
+        UIMenu uiMenu = new UIMenu(scan, userRepository, doctorRepository, patientRepository, authRepository, availableAppointmentRepository, bookedAppointmentRepository);
 
         // Populate some users:
 
@@ -36,41 +34,19 @@ public class Main {
         patientRepository.save(patient1);
         authRepository.save(auth2);
 
+        // Appointments:
+
+        Doctor.AvailableAppointment appointment1 =  new Doctor.AvailableAppointment("03/03/03", "1pm", doctor1);
+        availableAppointmentRepository.save(appointment1);
+
+//        Patient.BookedAppointment booked1 =  new Patient.BookedAppointment(appointment1, patient1);
+//        bookedAppointmentRepository.save(booked1);
+//        availableAppointmentRepository.remove(appointment1);
 
         // Show UI Menu
         uiMenu.showMenu();
     }
 }
 
-
-//   Initialize some users:
-//        Patient patient1 = new Patient("Gabriel", "email", "address", "092", "March 4", 70, 170.5, "C");
-//        save(patient1, "gab", "gab");
-//        Doctor doctor1 = new Doctor("Victor", "email", "address", "098", "Family medicine");
-//        save(doctor1, "vic", "vic");
-//        Patient patient2 = new Patient("Jessica", "email", "address", "092", "June 4", 60, 160.5, "B");
-//        save(patient2, "jess", "jess");
-//        Doctor doctor2 = new Doctor("Ulises", "email", "address", "098", "Internal medicine");
-//        save(doctor2, "uls", "uls");
-//        Doctor doctor3 = new Doctor("Rogelio", "email", "address", "098", "Pediatric");
-//        save(doctor3, "rog", "rog");
-
-// Login User;
-// Auth.login("vic", "vic");
-// Auth.login("gab", "gab");
-
-// Create initial available appointments:
-//        Doctor.AvailableAppointment appointment1 = new Doctor.AvailableAppointment("03/03/2025", "1pm", doctor1);
-//        Doctor.AvailableAppointment appointment2 = new Doctor.AvailableAppointment("03/03/2025", "2pm", doctor2);
-//        Doctor.AvailableAppointment appointment3 = new Doctor.AvailableAppointment("03/03/2025", "2pm", doctor3);
-//        Doctor.AvailableAppointment appointment4 = new Doctor.AvailableAppointment("03/03/2025", "4pm", doctor1);
-//        Doctor.AvailableAppointment appointment5 = new Doctor.AvailableAppointment("03/03/2025", "5pm", doctor2);
-//        Doctor.AvailableAppointment appointment6 = new Doctor.AvailableAppointment("03/03/2025", "6pm", doctor3);
-//        doctor1.addNewAppointment(appointment1);
-//        doctor2.addNewAppointment(appointment2);
-//        doctor3.addNewAppointment(appointment3);
-//        doctor1.addNewAppointment(appointment4);
-//        doctor2.addNewAppointment(appointment5);
-//        doctor3.addNewAppointment(appointment6);
 
 

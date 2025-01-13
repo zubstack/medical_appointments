@@ -15,7 +15,6 @@ public class AuthRepository  implements Repository<Auth>{
 
     @Override
     public List<Auth> findAll() {
-        // Usa conn para hacer un query "SELECT" a la base de datos
         return auths;
     }
 

@@ -2,11 +2,11 @@ package ui;
 
 import model.Auth;
 import model.Doctor;
-import model.User;
 import repository.AuthRepository;
+import repository.AvailableAppointmentRepository;
 import repository.UserRepository;
 
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -15,13 +15,15 @@ import static ui.UIMenu.*;
 public class UIDoctorMenu {
 
     private final Scanner scan;
-    private UserRepository userRepository;
-    private AuthRepository authRepository;
+    private final UserRepository userRepository;
+    private final AuthRepository authRepository;
+    private final AvailableAppointmentRepository availableAppointmentRepository;
 
-    public UIDoctorMenu(Scanner scan, UserRepository userRepository, AuthRepository authRepository) {
+    public UIDoctorMenu(Scanner scan, UserRepository userRepository, AuthRepository authRepository, AvailableAppointmentRepository availableAppointmentRepository) {
         this.scan = scan;
-        this.userRepository=  userRepository;
-        this.authRepository=  authRepository;
+        this.userRepository = userRepository;
+        this.authRepository = authRepository;
+        this.availableAppointmentRepository = availableAppointmentRepository;
     }
 
     public void showMenu(Doctor doctor) {
@@ -92,7 +94,7 @@ public class UIDoctorMenu {
         do {
             date = getDateForm();
             time = getTimeForm();
-            appointment = new model.Doctor.AvailableAppointment(date, time, doctor);
+            appointment = new Doctor.AvailableAppointment(date, time, doctor);
 
             message.info("New appointment: " + appointment);
             message.prompt("Confirm appointment:\n(1). YES\n(2). NO\n(3). EXIT");
@@ -102,7 +104,7 @@ public class UIDoctorMenu {
             switch (response) {
                 case 1:
                     isConfirmed = true;
-                    doctor.addNewAppointment(appointment);
+                    availableAppointmentRepository.save(appointment);
                     message.info("New appointment created.");
                     break;
                 case 3:
@@ -115,7 +117,7 @@ public class UIDoctorMenu {
 
     public void showAvailableAppointments(Doctor doctor) {
         message.info("Available appointments");
-        doctor.showAvailableAppointments();
+        showDoctorAvailableAppointments(doctor.getId());
     }
 
     public String getDateForm() {
@@ -139,5 +141,21 @@ public class UIDoctorMenu {
         minutes = scan.nextInt();
 
         return hour + "h" + minutes;
+    }
+
+    public void showDoctorAvailableAppointments(String doctorId) {
+
+        ArrayList<Doctor.AvailableAppointment> availableAppointments = availableAppointmentRepository.findByDoctorId(doctorId);
+
+        if (availableAppointments != null) {
+            if (!availableAppointments.isEmpty()) {
+                for (Doctor.AvailableAppointment availableAppointment : availableAppointments) {
+                    message.listItem(availableAppointment.toString());
+                }
+            }
+
+        } else {
+            message.info("EMPTY");
+        }
     }
 }

@@ -3,7 +3,6 @@ package model;
 import repository.AuthRepository;
 import repository.UserRepository;
 
-import java.util.ArrayList;
 import java.util.UUID;
 
 import static ui.UIMenu.message;
