@@ -16,7 +16,6 @@ public class UIMenu {
     private final UIDoctorMenu uiDoctorMenu;
     private final UIPatientMenu uiPatientMenu;
     private final UIDevMenu uiDevMenu;
-    private final UINurseMenu uiNurseMenu;
 
     public UIMenu(Scanner scan) {
         this.scan = scan;
@@ -24,7 +23,6 @@ public class UIMenu {
         this.uiDoctorMenu = new UIDoctorMenu(scan);
         this.uiPatientMenu = new UIPatientMenu(scan);
         this.uiDevMenu = new UIDevMenu(scan);
-        this.uiNurseMenu = new UINurseMenu(scan);
     }
 
 
@@ -48,9 +46,6 @@ public class UIMenu {
                 break;
             case "Patient":
                 uiPatientMenu.showMenu((Patient) user);
-                break;
-            case "Nurse":
-                uiNurseMenu.showMenu((Nurse) user);
                 break;
         }
     }
@@ -95,7 +90,7 @@ public class UIMenu {
     private void showRegistrationMenu() {
         message.prompt("Registration. Please help us with some information: ");
         int response = 0;
-        String[] options = new String[]{"Doctor", "Patient", "Nurse", "Exit"};
+        String[] options = new String[]{"Doctor", "Patient", "Exit"};
         do {
             try {
                 showOptions("What are you?", options);
@@ -133,9 +128,6 @@ public class UIMenu {
                 break;
             case 2:
                 uiPatientMenu.showRegistrationMenu(name, email, address, phoneNumber);
-                break;
-            case 3:
-                uiNurseMenu.showRegistrationMenu(name, email, address, phoneNumber);
                 break;
         }
     }

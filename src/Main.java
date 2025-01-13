@@ -1,10 +1,7 @@
-import model.Auth;
-import model.Nurse;
 import ui.UIMenu;
 import model.Doctor;
 import model.Patient;
 
-import java.util.Date;
 import java.util.Scanner;
 
 import static model.User.registerNewUser;
@@ -26,8 +23,6 @@ public class Main {
         registerNewUser(doctor2, "uls", "uls");
         Doctor doctor3 = new Doctor("Rogelio", "email", "address", "098", "Pediatric");
         registerNewUser(doctor3, "rog", "rog");
-        Nurse nurse = new Nurse("Beatriz", "email", "address", "098", "Pediatric");
-        registerNewUser(nurse, "bet", "bet");
 
         // Login User;
         // Auth.login("vic", "vic");
