@@ -22,23 +22,12 @@ public class Patient extends User {
     }
 
     public static class BookedAppointment {
-        String ID;
-        Date date;
-        String time;
-        Doctor doctor;
-        Patient patient;
+        private String ID;
+        private Date date;
+        private String time;
+        private Doctor doctor;
+        private Patient patient;
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yy");
-
-        @Override
-        public String toString() {
-            return '[' +
-                    "Date: " + getDate(date) +
-                    ", Time: '" + getTime() + '\'' +
-                    ", Doctor: " + doctor.getName() +
-                    ", Speciality: " + doctor.getSpeciality() +
-                    ", Patient: " + patient.getName() +
-                    ']';
-        }
 
         public BookedAppointment(Doctor.AvailableAppointment appointment, Patient patient) {
             this.ID = appointment.getID();
@@ -54,6 +43,17 @@ public class Patient extends User {
 
         public String getTime() {
             return time;
+        }
+
+        @Override
+        public String toString() {
+            return '[' +
+                    "Date: " + getDate(date) +
+                    ", Time: '" + getTime() + '\'' +
+                    ", Doctor: " + doctor.getName() +
+                    ", Speciality: " + doctor.getSpeciality() +
+                    ", Patient: " + patient.getName() +
+                    ']';
         }
     }
 

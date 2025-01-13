@@ -20,9 +20,9 @@ public class Doctor extends User {
     public static class AvailableAppointment {
 
         final private String ID = UUID.randomUUID().toString();
-        Date date;
-        String time;
-        Doctor doctor;
+        private Date date;
+        private String time;
+        private Doctor doctor;
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yy");
 
         public AvailableAppointment(String date, String time, Doctor doctor) {
