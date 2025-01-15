@@ -1,25 +1,49 @@
 package model;
 
+import jakarta.persistence.*;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
+@Entity
+@Table(name = "doctor")
 public class Doctor extends User {
+
+    @Column(name = "speciality", nullable = false, length = 255)
     private String speciality;
+
+    protected Doctor() {}
 
     public Doctor(String name, String email, String address, String phoneNumber, String speciality) {
         super(name, email, address, phoneNumber);
         this.speciality = speciality;
     }
 
+    @Entity
+    @Inheritance(strategy = InheritanceType.JOINED)
+    @Table(name = "available_appointment")
     public static class AvailableAppointment {
 
-        final private String ID = UUID.randomUUID().toString();
+        @Id
+        @Column(name = "id", nullable = false, length = 36)
+        final private String id = UUID.randomUUID().toString();
+
+        @Temporal(TemporalType.DATE)
+        @Column(name = "appointment_date", nullable = false)
         private final Date date;
+
+        @Column(name = "appointment_time", nullable = false, length = 10)
         private final String time;
+
+        @ManyToOne(fetch = FetchType.LAZY)
+        @JoinColumn(name = "doctor_id", nullable = false)
         private final Doctor doctor;
+
+        @Transient
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yy");
+
 
         public AvailableAppointment(String date, String time, Doctor doctor) {
             try {
@@ -31,8 +55,8 @@ public class Doctor extends User {
             this.doctor = doctor;
         }
 
-        public String getID() {
-            return ID;
+        public String getId() {
+            return id;
         }
 
         public String getDate() {

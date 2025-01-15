@@ -1,5 +1,6 @@
 package model;
 
+import jakarta.persistence.*;
 import repository.AuthRepository;
 import repository.UserRepository;
 
@@ -7,13 +8,24 @@ import java.util.UUID;
 
 import static ui.UIMenu.message;
 
-
+@Entity
+@Table(name = "auth")
 public class Auth {
+
+    @Id
+    @Column(name = "id", nullable = false, length = 36)
     final private String ID = UUID.randomUUID().toString();
+
+    @Column(name = "username", nullable = false)
     final private String username;
+
+    @Column(name = "user_id", nullable = false)
     final private String userId;
+
+    @Column(name = "password", nullable = false)
     final private String password;
 
+    @Transient
     static private User currentUser;
 
     public Auth(String username, String userId, String password) {

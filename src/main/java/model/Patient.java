@@ -1,10 +1,24 @@
 package model;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "patient")
+
 public class Patient extends User {
+    @Column(name = "birthday", nullable = false)
     private String birthday;
+
+    @Column(name = "weight", nullable = false)
     private double weight;
+
+    @Column(name = "height", nullable = false)
     private double height;
+
+    @Column(name = "blood", nullable = false)
     private String blood;
+
+    public Patient (){};
 
     public Patient(String name, String email, String address, String phoneNumber, String birthday, double weight, double height, String blood) {
         super(name, email, address, phoneNumber);
@@ -14,14 +28,22 @@ public class Patient extends User {
         this.blood = blood;
     }
 
+    @Entity
+    @Table(name = "booked_appointment")
     public static class BookedAppointment extends Doctor.AvailableAppointment {
-        private final String ID;
+
+        @Id
+        @Column(name = "id", nullable = false, length = 36)
+        private final String id;
+
+        @ManyToOne(fetch = FetchType.LAZY)
+        @JoinColumn(name = "patient_id", nullable = false)
         private final Patient patient;
 
         public BookedAppointment(Doctor.AvailableAppointment appointment, Patient patient) {
             super(appointment.getDate(), appointment.getTime(), appointment.getDoctor());
             this.patient = patient;
-            this.ID = appointment.getID();
+            this.id = appointment.getId();
         }
 
         public Patient getPatient() {

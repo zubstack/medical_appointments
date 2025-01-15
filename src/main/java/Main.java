@@ -1,14 +1,18 @@
 import model.Auth;
+import org.hibernate.Session;
 import repository.*;
 import ui.UIMenu;
 import model.Doctor;
 import model.Patient;
+import util.DataBaseConnection;
 
 import java.util.Scanner;
 
 
 public class Main {
     public static void main(String[] args) {
+        Session session = DataBaseConnection.getSession();
+
         UserRepository userRepository = new UserRepository(new Object());
         DoctorRepository doctorRepository = new DoctorRepository(new Object());
         PatientRepository patientRepository = new PatientRepository(new Object());
