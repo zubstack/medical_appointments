@@ -5,9 +5,11 @@ import model.Doctor;
 import repository.AuthRepository;
 import repository.AvailableAppointmentRepository;
 import repository.UserRepository;
+import service.AuthService;
 
 import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 import static ui.UIMenu.*;
@@ -15,13 +17,11 @@ import static ui.UIMenu.*;
 public class UIDoctorMenu {
 
     private final Scanner scan;
-    private final UserRepository userRepository;
     private final AuthRepository authRepository;
     private final AvailableAppointmentRepository availableAppointmentRepository;
 
     public UIDoctorMenu(Scanner scan, UserRepository userRepository, AuthRepository authRepository, AvailableAppointmentRepository availableAppointmentRepository) {
         this.scan = scan;
-        this.userRepository = userRepository;
         this.authRepository = authRepository;
         this.availableAppointmentRepository = availableAppointmentRepository;
     }
@@ -50,7 +50,7 @@ public class UIDoctorMenu {
                         message.info("Cancel appointment");
                         break;
                     case 5:
-                        Auth.logout();
+                        AuthService.logout();
                         message.info("LOGGING OUT");
                         break;
                     default:
@@ -63,7 +63,7 @@ public class UIDoctorMenu {
         } while (response != options.length);
     }
 
-    public void showRegistrationMenu(String name, String email, String address, String phoneNumber) {
+    public void showRegistrationMenu(String name,String paSurname, String maSurname, String email, String address, String phoneNumber) {
         String speciality;
         String username;
         String password;
@@ -76,12 +76,15 @@ public class UIDoctorMenu {
         message.field("Password: ");
         password = scan.nextLine().trim();
 
-        Doctor doctor = new Doctor(name, email, address, phoneNumber, speciality);
-        userRepository.save(doctor);
-        Auth auth = new Auth(username, doctor.getId(), password);
-        authRepository.save(auth);
+        registerNewDoctor(name,paSurname, maSurname, email, address, phoneNumber, speciality, username, password);
 
-        message.info("New " + doctor.getClass().getSimpleName() + " has been registered.");
+        message.info("New [DOCTOR] has been registered.");
+    }
+
+    private void registerNewDoctor(String name, String paSurname, String maSurname, String email, String address, String phoneNumber, String speciality, String username, String password) {
+        Doctor doctor = new Doctor(name, paSurname, maSurname, email, address, phoneNumber, speciality);
+        Auth auth = new Auth(username, password, doctor);
+        authRepository.save(auth);
     }
 
     public void showCreateAppointmentMenu(Doctor doctor) {
@@ -145,8 +148,7 @@ public class UIDoctorMenu {
 
     public void showDoctorAvailableAppointments(String doctorId) {
 
-        ArrayList<Doctor.AvailableAppointment> availableAppointments = availableAppointmentRepository.findByDoctorId(doctorId);
-
+        List<Doctor.AvailableAppointment> availableAppointments = availableAppointmentRepository.findByDoctorId(doctorId);
         if (availableAppointments != null) {
             if (!availableAppointments.isEmpty()) {
                 for (Doctor.AvailableAppointment availableAppointment : availableAppointments) {

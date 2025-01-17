@@ -9,7 +9,7 @@ public interface Repository<T>{
 
     void save (T t);
 
-    void update (Object value, String field, int id);
+    void update (T t);
 
-    void deleteById (Integer id);
+    void delete (T t);
 }

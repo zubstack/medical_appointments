@@ -1,23 +1,33 @@
 
 package repository;
 
+import model.Doctor;
 import model.Patient;
+import org.hibernate.Session;
+import util.DataBaseConnection;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class BookedAppointmentRepository implements Repository<Patient.BookedAppointment> {
 
-    Object conn;
-    ArrayList<Patient.BookedAppointment> bookedAppointments = new ArrayList<>();
-
-    public BookedAppointmentRepository(Object conn) {
-        this.conn = conn;
-    }
+    private static final String TABLE_NAME = "booked_appointment";
 
     @Override
     public List<Patient.BookedAppointment> findAll() {
-        return bookedAppointments;
+        try (Session session = DataBaseConnection.getSession()) {
+            session.beginTransaction();
+            List<Patient.BookedAppointment> appointments = session.createSelectionQuery(
+                    "from BookedAppointment",
+                    Patient.BookedAppointment.class
+            ).getResultList();
+            session.getTransaction().commit();
+            return appointments;
+        } catch (Exception e) {
+            System.err.println("Error finding all " + TABLE_NAME + "s: " + e.getMessage());
+            return Collections.emptyList();
+        }
     }
 
     @Override
@@ -27,31 +37,49 @@ public class BookedAppointmentRepository implements Repository<Patient.BookedApp
 
     @Override
     public void save(Patient.BookedAppointment appointment) {
-        bookedAppointments.add(appointment);
-    }
-
-    @Override
-    public void update(Object value, String field, int id) {
-
-    }
-
-    @Override
-    public void deleteById(Integer id) {
-
-    }
-
-    public void remove(Patient.BookedAppointment appointment) {
-        bookedAppointments.remove(appointment);
-    }
-
-    public ArrayList<Patient.BookedAppointment> findByPatientId(String patientId){
-        ArrayList<Patient.BookedAppointment> patientBookedAppointments = new ArrayList<>();
-        for (Patient.BookedAppointment appointment : bookedAppointments) {
-            if (appointment.getPatient().getId().equals(patientId)) {
-                patientBookedAppointments.add(appointment);
-            }
+        try (Session session = DataBaseConnection.getSession()) { // Open and close sessions automatically.
+            session.beginTransaction();
+            session.persist(appointment);
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            System.err.println("Error saving " + TABLE_NAME + ": " + e.getMessage());
         }
-        return patientBookedAppointments;
+    }
+
+    @Override
+    public void update(Patient.BookedAppointment appointment) {
+        try (Session session = DataBaseConnection.getSession()) { // Open and close sessions automatically.
+            session.beginTransaction();
+            session.persist(appointment);
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            System.err.println("Error saving " + TABLE_NAME + ": " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void delete(Patient.BookedAppointment appointment) {
+        try (Session session = DataBaseConnection.getSession()) {
+            session.beginTransaction();
+            session.remove(appointment);
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            System.err.println("Error saving " + TABLE_NAME + ": " + e.getMessage());
+        }
+    }
+
+    public List<Patient.BookedAppointment> findByPatientId(String patientId) {
+        try (Session session = DataBaseConnection.getSession()) {
+            session.beginTransaction();
+            List<Patient.BookedAppointment> appointments = session.createQuery(
+                    "from BookedAppointment where patient.id = :patientId",
+                    Patient.BookedAppointment.class
+            ).setParameter("patientId", patientId).getResultList();
+            session.getTransaction().commit();
+            return appointments;
+        } catch (Exception e) {
+            return null;
+        }
     }
 
 }

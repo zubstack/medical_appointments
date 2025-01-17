@@ -46,6 +46,7 @@ public class UIDevMenu {
     }
 
     private void showUsers() {
+        message.info("Users in database");
         List<User> users = userRepository.findAll();
         users.forEach(message::listItem);
     }

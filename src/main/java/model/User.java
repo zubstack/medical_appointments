@@ -19,6 +19,12 @@ public abstract class User {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "pa_surname",nullable = false, unique = true, length = 320)
+    private String paSurname;
+
+    @Column(name = "ma_surname", nullable = false, unique = true, length = 320)
+    private String maSurname;
+
     @Column(name = "email", nullable = false, unique = true, length = 320)
     private String email;
 
@@ -30,11 +36,13 @@ public abstract class User {
 
     protected User(){}
 
-    public User(String name, String email, String address, String phoneNumber) {
+    public User(String name, String pa_surname, String ma_surname, String email, String address, String phoneNumber) {
         this.name = name;
         this.email = email;
         this.address = address;
         this.phoneNumber = phoneNumber;
+        this.paSurname = pa_surname;
+        this.maSurname = ma_surname;
     }
 
     public String getId() {
@@ -47,6 +55,22 @@ public abstract class User {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getPaSurname() {
+        return paSurname;
+    }
+
+    public void setPaSurname(String pa_surname) {
+        this.paSurname = pa_surname;
+    }
+
+    public String getMaSurname() {
+        return maSurname;
+    }
+
+    public void setMaSurname(String maSurname) {
+        this.maSurname = maSurname;
     }
 
     public String getEmail() {
@@ -92,6 +116,13 @@ public abstract class User {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName().toUpperCase() + ": Name: " + getName()+ " Email: " + getEmail()+ " Address: " + getAddress()+ " Phone: " + getPhoneNumber();
+        return "User { " +
+                "name='" + name + '\'' +
+                ", pa_surname='" + paSurname + '\'' +
+                ", ma_surname='" + maSurname + '\'' +
+                ", email='" + email + '\'' +
+                ", address='" + address + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                '}';
     }
 }

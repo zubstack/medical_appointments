@@ -2,6 +2,7 @@ package ui;
 
 import model.*;
 import repository.*;
+import service.AuthService;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -13,7 +14,6 @@ public class UIMenu {
             "July", "August", "September", "October", "November", "December"
     };
 
-    private final UserRepository userRepository;
     private final AuthRepository authRepository;
 
     final private Scanner scan;
@@ -25,7 +25,6 @@ public class UIMenu {
 
     public UIMenu(Scanner scan, UserRepository userRepository, DoctorRepository doctorRepository, PatientRepository patientRepository, AuthRepository authRepository, AvailableAppointmentRepository availableAppointmentRepository, BookedAppointmentRepository bookedAppointmentRepository) {
         this.scan = scan;
-        this.userRepository = userRepository;
         this.authRepository = authRepository;
 
         message = new UIMessage();
@@ -38,7 +37,7 @@ public class UIMenu {
     public void showMenu() {
         boolean CLOSE_APP = false;
         while (!CLOSE_APP) {
-            User currentUser = Auth.getCurrentUser();
+            User currentUser = AuthService.getCurrentUser();
             if (currentUser != null) {
                 showLoggedUserMenu(currentUser);
             } else {
@@ -118,12 +117,18 @@ public class UIMenu {
 
     private void showRegistrationFromOption(int response) {
         String name;
+        String paSurname;
+        String maSurname;
         String email;
         String address;
         String phoneNumber;
 
         message.field("Name: ");
         name = scan.nextLine();
+        message.field("Lastname: ");
+        paSurname = scan.nextLine();
+        message.field("Second lastname: ");
+        maSurname = scan.nextLine();
         message.field("Email: ");
         email = scan.nextLine();
         message.field("Address: ");
@@ -133,10 +138,10 @@ public class UIMenu {
 
         switch (response) {
             case 1:
-                uiDoctorMenu.showRegistrationMenu(name, email, address, phoneNumber);
+                uiDoctorMenu.showRegistrationMenu(name, paSurname, maSurname, email, address, phoneNumber);
                 break;
             case 2:
-                uiPatientMenu.showRegistrationMenu(name, email, address, phoneNumber);
+                uiPatientMenu.showRegistrationMenu(name, paSurname, maSurname, email, address, phoneNumber);
                 break;
         }
     }
@@ -152,7 +157,7 @@ public class UIMenu {
         message.field("Password: ");
         password = scan.nextLine().trim();
 
-        return Auth.login(username, password, userRepository, authRepository);
+        return AuthService.login(username, password, authRepository);
     }
 
     public static void showOptions(String[] options) {

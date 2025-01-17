@@ -8,8 +8,12 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
+
 public class DataBaseConnection {
-    private static SessionFactory getSessionFactory (){
+    private static SessionFactory sessionFactory = buildSessionFactory();
+
+    private static SessionFactory buildSessionFactory() {
+
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
         configuration.addAnnotatedClass(User.class);
@@ -20,10 +24,11 @@ public class DataBaseConnection {
         configuration.addAnnotatedClass(Patient.BookedAppointment.class);
 
         return configuration.buildSessionFactory();
+
     }
 
-    public static Session getSession(){
-        return getSessionFactory().openSession();
+    public static Session getSession() {
+        return sessionFactory.openSession();
     }
 
 }

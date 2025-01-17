@@ -4,13 +4,13 @@ import model.Auth;
 import model.Doctor;
 import model.Patient;
 import repository.*;
+import service.AuthService;
 
 import java.util.*;
 
 import static ui.UIMenu.message;
 
 public class UIPatientMenu {
-    private final UserRepository userRepository;
     private final DoctorRepository doctorRepository;
     private final AuthRepository authRepository;
     private final AvailableAppointmentRepository availableAppointmentRepository;
@@ -21,7 +21,6 @@ public class UIPatientMenu {
 
     public UIPatientMenu(Scanner scan, UserRepository userRepository, DoctorRepository doctorRepository, AuthRepository authRepository, AvailableAppointmentRepository availableAppointmentRepository, BookedAppointmentRepository bookedAppointmentRepository) {
         this.scan = scan;
-        this.userRepository = userRepository;
         this.doctorRepository = doctorRepository;
         this.authRepository = authRepository;
         this.availableAppointmentRepository = availableAppointmentRepository;
@@ -49,7 +48,7 @@ public class UIPatientMenu {
                         message.info("Cancel appointment");
                         break;
                     case 4:
-                        Auth.logout();
+                        AuthService.logout();
                         message.info("LOGGING OUT");
                         break;
                     default:
@@ -63,7 +62,7 @@ public class UIPatientMenu {
 
     }
 
-    public void showRegistrationMenu(String name, String email, String address, String phoneNumber) {
+    public void showRegistrationMenu(String name,String paSurname, String maSurname, String email, String address, String phoneNumber) {
         String birthday;
         String blood;
         double weight;
@@ -91,12 +90,15 @@ public class UIPatientMenu {
         message.field("Password: ");
         password = scan.nextLine().trim();
 
-        Patient patient = new Patient(name, email, address, phoneNumber, birthday, weight, height, blood);
-        userRepository.save(patient);
-        Auth auth = new Auth(username, patient.getId(), password);
-        authRepository.save(auth);
+        registerNewPatient(name, paSurname, maSurname,email, address, phoneNumber, birthday, weight, height, blood, username, password);
 
-        message.info("New " + patient.getClass().getSimpleName() + " has been registered.");
+        message.info("New [PATIENT] has been registered.");
+    }
+
+    private void registerNewPatient(String name, String paSurname, String maSurname, String email, String address, String phoneNumber, String birthday, Double weight, Double height, String blood, String username, String password) {
+        Patient patient = new Patient(name,paSurname, maSurname, email, address, phoneNumber, birthday, weight, height, blood);
+        Auth auth = new Auth(username, password, patient);
+        authRepository.save(auth);
     }
 
     void showBookAvailableAppointmentMenu(Patient patient) {
@@ -115,7 +117,7 @@ public class UIPatientMenu {
 
             if (!availableDoctors.isEmpty()) {
                 for (Doctor availableDoctor : availableDoctors) {
-                    ArrayList<Doctor.AvailableAppointment> availableAppointments = availableAppointmentRepository.findByDoctorId(availableDoctor.getId());
+                    List<Doctor.AvailableAppointment> availableAppointments = availableAppointmentRepository.findByDoctorId(availableDoctor.getId());
                     for (Doctor.AvailableAppointment appointment : availableAppointments) {
                         appointmentsTree.put(k, appointment);
                         message.numberedOption(k, appointment.toString());
@@ -167,7 +169,7 @@ public class UIPatientMenu {
 
 
     public boolean hasAvailableAppointments(String doctorId) {
-        ArrayList<Doctor.AvailableAppointment> availableAppointments = availableAppointmentRepository.findByDoctorId(doctorId);
+        List<Doctor.AvailableAppointment> availableAppointments = availableAppointmentRepository.findByDoctorId(doctorId);
         if (availableAppointments == null) {
             return false;
         }
@@ -175,7 +177,7 @@ public class UIPatientMenu {
     }
 
     public void showBookedAppointments(String patientId) {
-        ArrayList<Patient.BookedAppointment> patientBookedAppointments = bookedAppointmentRepository.findByPatientId(patientId);
+        List<Patient.BookedAppointment> patientBookedAppointments = bookedAppointmentRepository.findByPatientId(patientId);
         if (patientBookedAppointments != null) {
             if (!patientBookedAppointments.isEmpty()) {
                 patientBookedAppointments.forEach(message::listItem);
@@ -201,7 +203,7 @@ public class UIPatientMenu {
     // Transaction: Book an appointment
     void bookAnAppointment(Patient.BookedAppointment newBookedAppointment, Doctor.AvailableAppointment selectedAppointment) {
         bookedAppointmentRepository.save(newBookedAppointment);
-        availableAppointmentRepository.remove(selectedAppointment);
+        availableAppointmentRepository.delete(selectedAppointment);
         if (!hasAvailableAppointments(selectedAppointment.getDoctor().getId())) {
             availableDoctors.remove(selectedAppointment.getDoctor());
         }

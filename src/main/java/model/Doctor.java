@@ -11,18 +11,18 @@ import java.util.UUID;
 @Table(name = "doctor")
 public class Doctor extends User {
 
-    @Column(name = "speciality", nullable = false, length = 255)
+    @Column(name = "speciality", nullable = false)
     private String speciality;
 
-    protected Doctor() {}
+    public Doctor() {
+    }
 
-    public Doctor(String name, String email, String address, String phoneNumber, String speciality) {
-        super(name, email, address, phoneNumber);
+    public Doctor(String name, String pa_surname, String ma_surname, String email, String address, String phoneNumber, String speciality) {
+        super(name, pa_surname, ma_surname, email, address, phoneNumber);
         this.speciality = speciality;
     }
 
-    @Entity
-    @Inheritance(strategy = InheritanceType.JOINED)
+    @Entity(name = "AvailableAppointment")
     @Table(name = "available_appointment")
     public static class AvailableAppointment {
 
@@ -31,19 +31,21 @@ public class Doctor extends User {
         final private String id = UUID.randomUUID().toString();
 
         @Temporal(TemporalType.DATE)
-        @Column(name = "appointment_date", nullable = false)
-        private final Date date;
+        @Column(name = "date", nullable = false)
+        private Date date;
 
-        @Column(name = "appointment_time", nullable = false, length = 10)
-        private final String time;
+        @Column(name = "time", nullable = false, length = 10)
+        private String time;
 
-        @ManyToOne(fetch = FetchType.LAZY)
+        @ManyToOne(fetch = FetchType.EAGER)
         @JoinColumn(name = "doctor_id", nullable = false)
-        private final Doctor doctor;
+        private Doctor doctor;
 
         @Transient
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yy");
 
+        public AvailableAppointment() {
+        }
 
         public AvailableAppointment(String date, String time, Doctor doctor) {
             try {
@@ -59,7 +61,11 @@ public class Doctor extends User {
             return id;
         }
 
-        public String getDate() {
+        public Date getDate() {
+            return date;
+        }
+
+        public String getDateString() {
             return format.format(date);
         }
 
@@ -77,8 +83,11 @@ public class Doctor extends User {
 
         @Override
         public String toString() {
-            return "[APPOINTMENT] : Date: " + getDate() +
-                    ", Time: '" + time + '\'' + ", Doctor: " + doctor.getName() + ", Speciality: " + doctor.getSpeciality() ;
+            return "[APPOINTMENT]: "
+                    + date + " | "
+                    + time + " | "
+                    + "Dr. " + doctor.getName() + " " + doctor.getPaSurname() + " | "
+                    + "Speciality: " + doctor.getSpeciality();
         }
     }
 

@@ -2,6 +2,9 @@ package model;
 
 import jakarta.persistence.*;
 
+import java.util.Date;
+import java.util.UUID;
+
 @Entity
 @Table(name = "patient")
 
@@ -18,32 +21,52 @@ public class Patient extends User {
     @Column(name = "blood", nullable = false)
     private String blood;
 
-    public Patient (){};
+    public Patient() {
+    }
 
-    public Patient(String name, String email, String address, String phoneNumber, String birthday, double weight, double height, String blood) {
-        super(name, email, address, phoneNumber);
+    ;
+
+    public Patient(String name, String pa_surname, String ma_surname, String email, String address, String phoneNumber, String birthday, double weight, double height, String blood) {
+        super(name, pa_surname, ma_surname, email, address, phoneNumber);
         this.birthday = birthday;
         this.weight = weight;
         this.height = height;
         this.blood = blood;
     }
 
-    @Entity
+    @Entity(name = "BookedAppointment")
     @Table(name = "booked_appointment")
-    public static class BookedAppointment extends Doctor.AvailableAppointment {
+    public static class BookedAppointment {
 
         @Id
         @Column(name = "id", nullable = false, length = 36)
-        private final String id;
+        private final String id = UUID.randomUUID().toString();
 
-        @ManyToOne(fetch = FetchType.LAZY)
+        @Temporal(TemporalType.DATE)
+        @Column(name = "date", nullable = false)
+        private Date date;
+
+        @Column(name = "time", nullable = false, length = 10)
+        private String time;
+
+        @ManyToOne(fetch = FetchType.EAGER)
+        @JoinColumn(name = "doctor_id", nullable = false)
+        private Doctor doctor;
+
+        @ManyToOne(fetch = FetchType.EAGER)
         @JoinColumn(name = "patient_id", nullable = false)
-        private final Patient patient;
+        private Patient patient;
+
+        public BookedAppointment() {
+        }
+
+        ;
 
         public BookedAppointment(Doctor.AvailableAppointment appointment, Patient patient) {
-            super(appointment.getDate(), appointment.getTime(), appointment.getDoctor());
+            this.date = appointment.getDate();
+            this.time = appointment.getTime();
+            this.doctor = appointment.getDoctor();
             this.patient = patient;
-            this.id = appointment.getId();
         }
 
         public Patient getPatient() {
@@ -52,12 +75,12 @@ public class Patient extends User {
 
         @Override
         public String toString() {
-            return "[BOOKED]" +
-                    "Date: " + super.getDate() +
-                    ", Time: '" + super.getTime() + '\'' +
-                    ", Doctor: " + super.getDoctor().getName() +
-                    ", Speciality: " + super.getDoctor().getSpeciality() +
-                    ", Patient: " + patient.getName();
+            return "[BOOKED]: "
+                    + date + " | "
+                    + time + " | "
+                    + "Dr. " + doctor.getName() + " " + doctor.getPaSurname()+" | "
+                    +"Speciality: " + doctor.getSpeciality() + " | "
+                    + "Patient: " + patient.getName() + " " + patient.getPaSurname();
         }
     }
 
