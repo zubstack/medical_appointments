@@ -1,8 +1,5 @@
 package repository;
 
-import model.*;
-import model.Patient;
-import model.Patient;
 import model.Patient;
 import org.hibernate.Session;
 import util.DataBaseConnection;

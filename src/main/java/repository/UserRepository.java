@@ -1,7 +1,6 @@
 package repository;
 
 import model.User;
-import model.User;
 import org.hibernate.Session;
 import util.DataBaseConnection;
 

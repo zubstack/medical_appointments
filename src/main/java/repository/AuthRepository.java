@@ -1,14 +1,10 @@
 package repository;
 
 import model.Auth;
-import model.Auth;
 import org.hibernate.Session;
-import org.hibernate.query.Query;
 import util.DataBaseConnection;
 
 import java.util.List;
-
-import static ui.UIMenu.message;
 
 public class AuthRepository implements Repository<Auth> {
 

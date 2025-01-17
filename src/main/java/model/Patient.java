@@ -24,7 +24,6 @@ public class Patient extends User {
     public Patient() {
     }
 
-    ;
 
     public Patient(String name, String pa_surname, String ma_surname, String email, String address, String phoneNumber, String birthday, double weight, double height, String blood) {
         super(name, pa_surname, ma_surname, email, address, phoneNumber);
@@ -60,8 +59,6 @@ public class Patient extends User {
         public BookedAppointment() {
         }
 
-        ;
-
         public BookedAppointment(Doctor.AvailableAppointment appointment, Patient patient) {
             this.date = appointment.getDate();
             this.time = appointment.getTime();
@@ -78,8 +75,8 @@ public class Patient extends User {
             return "[BOOKED]: "
                     + date + " | "
                     + time + " | "
-                    + "Dr. " + doctor.getName() + " " + doctor.getPaSurname()+" | "
-                    +"Speciality: " + doctor.getSpeciality() + " | "
+                    + "Dr. " + doctor.getName() + " " + doctor.getPaSurname() + " | "
+                    + "Speciality: " + doctor.getSpeciality() + " | "
                     + "Patient: " + patient.getName() + " " + patient.getPaSurname();
         }
     }

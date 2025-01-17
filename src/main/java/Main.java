@@ -1,6 +1,3 @@
-import model.Doctor;
-import model.Patient;
-import model.User;
 import repository.*;
 import ui.UIMenu;
 

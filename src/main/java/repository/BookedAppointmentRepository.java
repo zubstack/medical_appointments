@@ -1,12 +1,10 @@
 
 package repository;
 
-import model.Doctor;
 import model.Patient;
 import org.hibernate.Session;
 import util.DataBaseConnection;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 

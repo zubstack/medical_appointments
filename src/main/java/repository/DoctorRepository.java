@@ -1,7 +1,5 @@
 package repository;
 
-import model.Auth;
-import model.Doctor;
 import model.Doctor;
 import org.hibernate.Session;
 import util.DataBaseConnection;
